@@ -7,6 +7,7 @@
 2. 使用使用自动生成的函数进行Activity跳转代码，将页面所需数据作为了函数参数。
 3. Activity返回监听功能，不再需要重写`onActivityResult`方法，还能自动装箱返回数据并返回。
 
+全库没有一个反射，纯依靠APT实现。
 
 ## Dependency
 
@@ -38,7 +39,7 @@
 在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。  
 `@Params`默认使用变量名作为参数名，也可以指定参数的名字。  
 
-    @Address("activity://phoneNumber")
+    @Page("activity://phoneNumber")
     public class NumberInputActivity extends AppCompatActivity {
 
         @Params String name;
@@ -63,7 +64,7 @@
 使用`@Result`注解标记返回数据。使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。
 `@Result`默认使用变量名作为参数名，也可以指定参数的名字。
 
-    @Address("activity://name")
+    @Page
     public class NameInputActivity extends AppCompatActivity {
 
         @Result String name;
