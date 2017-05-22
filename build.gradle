@@ -1,0 +1,66 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'base'
+buildscript {
+    ext {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        bintrayUser = properties.getProperty('bintrayUser')
+        bintrayKey = properties.getProperty('bintrayKey')
+
+        ferryman_group = 'com.jude'
+        ferryman_version = '1.0.0-alpha1'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
+        classpath 'com.novoda:bintray-release:0.5.0'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+subprojects {pro ->
+    if (pro.name == 'sample')return
+
+    version = ferryman_group
+    group = ferryman_version
+
+    apply plugin: 'com.novoda.bintray-release'
+
+    publish {
+        groupId = ferryman_group
+        artifactId = pro.name
+        publishVersion = ferryman_version
+        desc = 'android page router'
+        website = 'https://github.com/novoda/jude95'
+        bintrayUser = bintrayUser
+        bintrayKey = bintrayKey
+    }
+}
+
+task uploadAll { task ->
+
+    task.group = 'upload'
+    gradle.projectsEvaluated {
+        task.dependsOn project.tasks.clean
+        task.dependsOn project.tasks.build
+
+        project.tasks.build.mustRunAfter project.tasks.clean
+
+        project.subprojects {
+            if (it.name != 'sample') {
+                Task upload = it.tasks.uploadArchives
+                task.dependsOn upload
+                upload.mustRunAfter project.tasks.build
+            }
+        }
+    }
+}
