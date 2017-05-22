@@ -9,26 +9,26 @@
 
 全库没有一个反射，纯依靠APT实现。  
 使用简洁直观的API处理页面跳转：
+```java
+Ferryman.from(MainActivity.this)
+        .gotoNameInputActivity()
+        .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
+            @Override
+            public void fullResult(@NonNull NameInputActivityResult data) {
+                name = data.getName();
+                tvName.setText(data.getName());
+            }
 
-    Ferryman.from(MainActivity.this)
-            .gotoNameInputActivity()
-            .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
-                @Override
-                public void fullResult(@NonNull NameInputActivityResult data) {
-                    name = data.getName();
-                    tvName.setText(data.getName());
-                }
+            @Override
+            public void emptyResult() {
+            }
 
-                @Override
-                public void emptyResult() {
-                }
-
-            });
-            
+        });
+```  
 以及使用URL跳转
-
+```java
     RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
-    
+```
 ## Dependency
 
     compile 'com.jude:ferryman:1.0.0-alpha1'
@@ -40,17 +40,17 @@
 使用`@Page`注解标记Activity。  
 默认将使用Activity包名作为URL。  
 可以填入页面URL，进行URL路由。一个Activity可以有多个地址。一个地址只能对应一个Activity。  
+```java
+@Page("activity://two")
+public class ActivityTwo extends Activity{
+}
 
-    @Page("activity://two")
-    public class ActivityTwo extends Activity{
-    }
+//API 方式
+Ferryman.from(ctx).gotoActivityTwo());
 
-    //API 方式
-    Ferryman.from(ctx).gotoActivityTwo());
-
-    //Url方式
-     RouterDriver.startActivity(this,"activity://two");
-
+//Url方式
+ RouterDriver.startActivity(this,"activity://two");
+```
 然后就可以使用上面2种优雅的Activity跳转方法了。
 
 #### 参数处理
@@ -58,121 +58,122 @@
 使用`@Params`注解标记参数。  
 在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。  
 `@Params`默认使用变量名作为参数名，也可以指定参数的名字。  
+```java
+@Page("activity://phoneNumber")
+public class NumberInputActivity extends AppCompatActivity {
 
-    @Page("activity://phoneNumber")
-    public class NumberInputActivity extends AppCompatActivity {
+    @Params String name;
+    @Params("country") String mCountry;
 
-        @Params String name;
-        @Params("country") String mCountry;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Ferryman.unboxingData(this);
+     }
+}
 
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            Ferryman.unboxingData(this);
-         }
-    }
+//API 方式
+Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 
-    //API 方式
-    Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
+//Url方式
+ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 
-    //Url方式
-     RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
-
-
+```
 
 #### 返回数据
 使用`@Result`注解标记返回数据。使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。
 `@Result`默认使用变量名作为参数名，也可以指定参数的名字。
+```java
+@Page
+public class NameInputActivity extends AppCompatActivity {
 
-    @Page
-    public class NameInputActivity extends AppCompatActivity {
+    @Result String name;
 
-        @Result String name;
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            Ferryman.unboxingData(this);
-        }
-
-        public void submit(){
-            name = etName.getText().toString();
-            Ferryman.boxingData(this);
-            finish();
-        }
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Ferryman.unboxingData(this);
     }
 
-    //API 方式
-    Ferryman.from(MainActivity.this)
-            .gotoNameInputActivity()
-            .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
-                @Override
-                public void fullResult(@NonNull NameInputActivityResult data) {
-                    name = data.getName();
-                    tvName.setText(data.getName());
-                }
+    public void submit(){
+        name = etName.getText().toString();
+        Ferryman.boxingData(this);
+        finish();
+    }
+}
 
-                @Override
-                public void emptyResult() {
+//API 方式
+Ferryman.from(MainActivity.this)
+        .gotoNameInputActivity()
+        .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
+            @Override
+            public void fullResult(@NonNull NameInputActivityResult data) {
+                name = data.getName();
+                tvName.setText(data.getName());
+            }
 
-                }
+            @Override
+            public void emptyResult() {
 
-            });
+            }
 
+        });
+```
 #### 数据注入抽取
 参数及返回数据可以定义在非Activity类里，只要与Activity建立关联。  
 1. 通过`@BindActivity`注解直接关联。
+```java
+@BindActivity(ActivityTwo.class)
+public class ActivityTwoData {
+    @Params
+    public String wtf;
+    @Params
+    public String HUIHJioluHNLI;
+    @Params
+    public int oooo;
+    @Result
+    public float yee;
 
-        @BindActivity(ActivityTwo.class)
-        public class ActivityTwoData {
-            @Params
-            public String wtf;
-            @Params
-            public String HUIHJioluHNLI;
-            @Params
-            public int oooo;
-            @Result
-            public float yee;
-
-        }
-
+}
+```
 然后数据的拆箱装箱。  
-
-    // 拆箱注入数据
-    Ferryman.unboxingDataFrom(activity).to(this);
-    // 装箱保存数据
-    Ferryman.boxingDataIn(this).to(mActivity);
-
+```java
+// 拆箱注入数据
+Ferryman.unboxingDataFrom(activity).to(this);
+// 装箱保存数据
+Ferryman.boxingDataIn(this).to(mActivity);
+```
 #### 自定义路由
 允许自己处理未被绑定Activity的url。返回null则表示不能处理这个url。  
-
-        FerrymanSetting.addRouterFactory(new Router.Factory() {
-            @Override
-            public Router createRouter(String url) {
-                return null;
-            }
-        });
-
-如果可以处理这个url，则返回处理Router  
-
-    public interface Router {
-        Intent start(@NonNull Context context, @NonNull String url);
+```java
+FerrymanSetting.addRouterFactory(new Router.Factory() {
+    @Override
+    public Router createRouter(String url) {
+        return null;
     }
-
+});
+```
+如果可以处理这个url，则返回处理Router  
+```java
+public interface Router {
+    Intent start(@NonNull Context context, @NonNull String url);
+}
+```
 #### 自定义数据传递序列化
 默认提供Gson实现的对象序列化，可以添加自定义序列化方式。返回null表示不能处理这个类型。  
-
-        FerrymanSetting.addConverterFactory(new Converter.Factory() {
-            @Override
-            public Converter createConverter(Type type) {
-                return null;
-            }
-        });
-
-如果可以处理这个类型，则返回处理Converter  
-
-    public interface Converter {
-        String encode(Type type,Object object);
-
-        Object decode(Type type,String string);
+```java
+FerrymanSetting.addConverterFactory(new Converter.Factory() {
+    @Override
+    public Converter createConverter(Type type) {
+        return null;
     }
+});
+```
+如果可以处理这个类型，则返回处理Converter  
+```java
+public interface Converter {
+    String encode(Type type,Object object);
+
+    Object decode(Type type,String string);
+}
+```
