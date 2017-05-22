@@ -7,8 +7,28 @@
 2. 使用使用自动生成的函数进行Activity跳转代码，将页面所需数据作为了函数参数。
 3. Activity返回监听功能，不再需要重写`onActivityResult`方法，还能自动装箱返回数据并返回。
 
-全库没有一个反射，纯依靠APT实现。
+全库没有一个反射，纯依靠APT实现。  
+使用简洁直观的API处理页面跳转：
 
+    Ferryman.from(MainActivity.this)
+            .gotoNameInputActivity()
+            .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
+                @Override
+                public void fullResult(@NonNull NameInputActivityResult data) {
+                    name = data.getName();
+                    tvName.setText(data.getName());
+                }
+
+                @Override
+                public void emptyResult() {
+                }
+
+            });
+            
+以及使用URL跳转
+
+    RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
+    
 ## Dependency
 
     compile 'com.jude:ferryman:1.0.0-alpha1'
