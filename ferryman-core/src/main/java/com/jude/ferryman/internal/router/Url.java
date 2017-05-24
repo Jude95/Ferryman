@@ -8,12 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * URL的实体封装类
- * URL: activity://  xxxxxxxxx  ?  a=1&b=2
- * scheme      authority      data
- * ---------------------
- * address
- * Created by zane on 2017/1/17.
+ * Created by zhuchenxi on 2017/1/17.
  */
 
 public class Url implements Parcelable {

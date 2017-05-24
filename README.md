@@ -11,7 +11,7 @@
 使用简洁直观的API处理页面跳转：
 ```java
 Ferryman.from(MainActivity.this)
-        .gotoNameInputActivity()
+        .gotoNameInputActivity(name)
         .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
             @Override
             public void fullResult(@NonNull NameInputActivityResult data) {
@@ -31,8 +31,8 @@ Ferryman.from(MainActivity.this)
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman:1.0.0-alpha1'
-    annotationProcessor 'com.jude:ferryman:1.0.0-alpha1'
+    compile 'com.jude:ferryman:<version>'
+    annotationProcessor 'com.jude:ferryman:<version>'
 
 ## Usage
 

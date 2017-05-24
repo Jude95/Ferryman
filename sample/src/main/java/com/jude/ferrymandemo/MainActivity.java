@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jude.ferryman.Ferryman;
 import com.jude.ferryman.OnDataResultListener;
 import com.jude.ferryman.R;
+import com.jude.ferryman.RouterDriver;
 import com.jude.ferryman.annotations.Page;
 import com.jude.ferrymandemo.input.NameInputActivityResult;
 import com.jude.ferrymandemo.input.NumberInputActivityResult;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
-
+        RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
         btnInputNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

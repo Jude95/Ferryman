@@ -83,7 +83,9 @@ public class SiphonGenerator extends ClassGenerator{
                         PARAMETER_CONTEXT);
             }
         }
-        methodSpecBuilder.endControlFlow();
+        if(!isFirst){
+            methodSpecBuilder.endControlFlow();
+        }
         result.addMethod(methodSpecBuilder.build());
     }
 

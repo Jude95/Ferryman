@@ -8,14 +8,15 @@ buildscript {
         bintrayKey = properties.getProperty('bintrayKey')
 
         ferryman_group = 'com.jude'
-        ferryman_version = '1.0.0-alpha1'
+        ferryman_version = '1.0.0-alpha5'
     }
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
-        classpath 'com.novoda:bintray-release:0.5.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -29,20 +30,34 @@ allprojects {
 
 subprojects {pro ->
     if (pro.name == 'sample')return
+    if (pro.name == 'app')return
 
-    version = ferryman_group
-    group = ferryman_version
+    version = ferryman_version
+    group = ferryman_group
 
-    apply plugin: 'com.novoda.bintray-release'
+    afterEvaluate{
 
-    publish {
-        groupId = ferryman_group
-        artifactId = pro.name
-        publishVersion = ferryman_version
-        desc = 'android page router'
-        website = 'https://github.com/novoda/jude95'
-        bintrayUser = bintrayUser
-        bintrayKey = bintrayKey
+        project.ext {
+            package_repo = 'maven'
+
+            package_group = 'com.jude'
+            package_artifact = pro.name
+            package_version = version
+            package_description = 'A tool for Android'
+
+
+            //开发者信息
+            developerId = 'jude95'
+            developerName = 'jude95'
+            developerEmail = 'jude@helloworld.moe'
+
+            //以上所有信息自行修改，以下不变
+
+            licenseName = 'The Apache Software License, Version 2.0'
+            licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            allLicenses = ["Apache-2.0"]
+        }
+        project.apply from:'https://cdn.rawgit.com/Jude95/JCenter/v2/bintray.gradle'
     }
 }
 
@@ -56,8 +71,8 @@ task uploadAll { task ->
         project.tasks.build.mustRunAfter project.tasks.clean
 
         project.subprojects {
-            if (it.name != 'sample') {
-                Task upload = it.tasks.uploadArchives
+            if (it.name != 'sample' && it.name != 'app') {
+                Task upload = it.tasks.bintrayUpload
                 task.dependsOn upload
                 upload.mustRunAfter project.tasks.build
             }

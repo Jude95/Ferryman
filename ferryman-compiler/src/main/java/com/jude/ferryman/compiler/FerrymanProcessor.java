@@ -142,6 +142,7 @@ public class FerrymanProcessor extends AbstractProcessor {
             for (ActivityInfo activityInfo : mActivityInfos) {
                 if (!activityInfo.getResult().isEmpty()){
                     new ResultGenerator(activityInfo).build().writeTo(filer);
+
                 }
             }
         } catch (IOException e) {
