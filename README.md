@@ -31,8 +31,8 @@ Ferryman.from(MainActivity.this)
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman:<version>'
-    annotationProcessor 'com.jude:ferryman:<version>'
+    compile 'com.jude:ferryman-core:<version>'
+    annotationProcessor 'com.jude:ferryman-compiler:<version>'
 
 ## Usage
 
