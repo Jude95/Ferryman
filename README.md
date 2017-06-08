@@ -36,7 +36,7 @@ Ferryman.from(MainActivity.this)
 
 ## Usage
 
-#### 页面路由
+### 页面路由
 使用`@Page`注解标记Activity。  
 默认将使用Activity包名作为URL。  
 可以填入页面URL，进行URL路由。一个Activity可以有多个地址。一个地址只能对应一个Activity。  
@@ -53,7 +53,7 @@ Ferryman.from(ctx).gotoActivityTwo());
 ```
 然后就可以使用上面2种优雅的Activity跳转方法了。
 
-#### 参数处理
+### 参数处理
 使用`@Params`注解标记参数。  
 在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。    
 ```java
@@ -78,7 +78,7 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 
 ```
 
-#### 返回数据
+### 返回数据
 使用`@Result`注解标记返回数据。  
 使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。  
 ```java
@@ -117,7 +117,8 @@ Ferryman.from(MainActivity.this)
 
         });
 ```
-#### 数据注入抽取
+
+### 数据注入抽取
 参数及返回数据可以定义在非Activity类里，只要**与Activity建立关联**。  
 1. 通过`@BindActivity`注解直接关联。
 ```java
@@ -141,7 +142,7 @@ Ferryman.unboxingDataFrom(activity).to(this);
 // 装箱保存数据
 Ferryman.boxingDataIn(this).to(mActivity);
 ```
-#### 自定义路由
+### 自定义路由
 允许自己处理未被绑定Activity的url。返回null则表示不能处理这个url。  
 ```java
 FerrymanSetting.addRouterFactory(new Router.Factory() {
@@ -157,7 +158,7 @@ public interface Router {
     Intent start(@NonNull Context context, @NonNull String url);
 }
 ```
-#### 自定义数据传递序列化
+### 自定义数据传递序列化
 默认提供Gson实现的对象序列化，可以添加自定义序列化方式。返回null表示不能处理这个类型。  
 ```java
 FerrymanSetting.addConverterFactory(new Converter.Factory() {
