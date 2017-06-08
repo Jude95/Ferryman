@@ -1,6 +1,6 @@
 # Ferryman Android页面路由框架
 
-解决项目初具规模后，页面跳转，传参，页面路由等功能代码十分冗余的问题。
+解决项目初具规模后，页面跳转，传参，页面路由等功能代码十分冗余的问题。  
 主要功能：
 
 1. Android端页面路由，与web页面路由统一，非常便捷的由web跳转activity页面并携带参数
@@ -8,7 +8,7 @@
 3. Activity返回监听功能，不再需要重写`onActivityResult`方法，还能自动装箱返回数据并返回。
 
 全库没有一个反射，纯依靠APT实现。  
-使用简洁直观的API处理页面跳转：
+使用简洁直观的代码处理页面跳转：
 ```java
 Ferryman.from(MainActivity.this)
         .gotoNameInputActivity(name)
@@ -31,8 +31,8 @@ Ferryman.from(MainActivity.this)
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:<version>'
-    annotationProcessor 'com.jude:ferryman-compiler:<version>'
+    compile 'com.jude:ferryman-core:v1.0.0-alpha5'
+    annotationProcessor 'com.jude:ferryman-compiler:v1.0.0-alpha5'
 
 ## Usage
 
@@ -45,19 +45,17 @@ Ferryman.from(MainActivity.this)
 public class ActivityTwo extends Activity{
 }
 
-//API 方式
+//API 方式启动页面
 Ferryman.from(ctx).gotoActivityTwo());
 
-//Url方式
+//Url 方式启动页面
  RouterDriver.startActivity(this,"activity://two");
 ```
 然后就可以使用上面2种优雅的Activity跳转方法了。
 
 #### 参数处理
-参数将作为自动生成API的方法参数。  
 使用`@Params`注解标记参数。  
-在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。  
-`@Params`默认使用变量名作为参数名，也可以指定参数的名字。  
+在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。    
 ```java
 @Page("activity://phoneNumber")
 public class NumberInputActivity extends AppCompatActivity {
@@ -81,8 +79,8 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 ```
 
 #### 返回数据
-使用`@Result`注解标记返回数据。使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。
-`@Result`默认使用变量名作为参数名，也可以指定参数的名字。
+使用`@Result`注解标记返回数据。  
+使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。  
 ```java
 @Page
 public class NameInputActivity extends AppCompatActivity {
@@ -120,7 +118,7 @@ Ferryman.from(MainActivity.this)
         });
 ```
 #### 数据注入抽取
-参数及返回数据可以定义在非Activity类里，只要与Activity建立关联。  
+参数及返回数据可以定义在非Activity类里，只要**与Activity建立关联**。  
 1. 通过`@BindActivity`注解直接关联。
 ```java
 @BindActivity(ActivityTwo.class)
