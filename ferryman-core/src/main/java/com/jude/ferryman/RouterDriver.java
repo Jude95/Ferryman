@@ -27,7 +27,7 @@ public class RouterDriver {
     }
 
     private static Intent getIntent(Context context, String url) {
-        Intent intent = FerrymanConfig.findRouter(url).start(context, url);
+        Intent intent = FerrymanSetting.findRouter(url).start(context, url);
         intent.putExtra(REQUEST_DATA, Url.parse(url));
         return intent;
     }

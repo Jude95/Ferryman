@@ -21,6 +21,11 @@ public class ActivityInfo {
     }
 
     public void addParams(FieldInfo info){
+        for (FieldInfo param : params) {
+            if(param.getKey().equals(info.getKey())){
+                return;
+            }
+        }
         params.add(info);
     }
 

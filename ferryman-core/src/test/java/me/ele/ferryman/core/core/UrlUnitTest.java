@@ -1,8 +1,8 @@
-package com.jude.ferryman.internal.core;
-
-import org.junit.Test;
+package me.ele.ferryman.core.core;
 
 import com.jude.ferryman.internal.router.Url;
+
+import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -82,11 +82,18 @@ public class UrlUnitTest {
     }
 
     @Test
+    public void testUrl2() throws Exception {
+        String encode = new Url.Builder().addParam("url","https://stackoverflow.com").addParam("url2","https://.com").build().toString();
+        Url url = Url.parse(encode);
+        System.out.println(url.getParams());
+    }
+
+    @Test
     public void testUrl() throws Exception {
         checkUrl("activity://two/xx?a=2&b=3");
         checkUrl("://two/xx?a=2&b=3", "two/xx?a=2&b=3");
         checkUrl("two/xx?a=2&b=3");
-        checkUrl("/xx?a=2&b=3");
+        checkUrl("/xx?a=http://xxxx&b=3");
         checkUrl("?a=2&b=3", "a=2&b=3");
         checkUrl("a=2&b=3");
         checkUrl("b=3");

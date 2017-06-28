@@ -3,6 +3,9 @@ package com.jude.ferryman.internal.router;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -89,7 +92,7 @@ public class Url implements Parcelable {
         //寻找scheme的结束地址 与 authority的起始地址
         int schemeEndPos = urlStr.indexOf(TAG_SCHEME_SUFFIX);
         int authorityStartPos = schemeEndPos + TAG_SCHEME_SUFFIX.length();
-        if (!urlStr.contains(TAG_SCHEME_SUFFIX)) {
+        if (!urlStr.substring(0,addressEndPos).contains(TAG_SCHEME_SUFFIX)) {
             schemeEndPos = 0;
             authorityStartPos = 0;
         }
@@ -106,7 +109,7 @@ public class Url implements Parcelable {
             for (String entry : paramsEntries) {
                 if (entry.contains(TAG_PARAMS_OPERATOR)) {
                     int operatorPos = entry.indexOf(TAG_PARAMS_OPERATOR);
-                    urlBuilder.addParam(entry.substring(0,operatorPos), entry.substring(operatorPos+1,entry.length()));
+                    urlBuilder.addParam(entry.substring(0,operatorPos), decode(entry.substring(operatorPos+1,entry.length())));
                 } else {
                     throw new IllegalArgumentException("params format error");
                 }
@@ -208,6 +211,22 @@ public class Url implements Parcelable {
         }
     };
 
+    private static String encode(String origin){
+        try {
+            return URLEncoder.encode(origin, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("params encode error");
+        }
+    }
+
+    private static String decode(String origin){
+        try {
+            return URLDecoder.decode(origin, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("params encode error");
+        }
+    }
+
     private static String getString(String value) {
         return value == null ? "" : value;
     }
@@ -227,7 +246,7 @@ public class Url implements Parcelable {
         Iterator<Map.Entry<String, String>> iterator = params.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, String> entry = iterator.next();
-            url += getString(entry.getKey()) + TAG_PARAMS_OPERATOR + getString(entry.getValue());
+            url += getString(entry.getKey()) + TAG_PARAMS_OPERATOR + encode(getString(entry.getValue()));
             if (iterator.hasNext()) {
                 url += TAG_PARAMS_DIVIDER;
             }

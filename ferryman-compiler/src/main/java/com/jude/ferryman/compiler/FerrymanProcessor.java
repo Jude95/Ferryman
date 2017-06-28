@@ -153,7 +153,6 @@ public class FerrymanProcessor extends AbstractProcessor {
 
     /**
      * 添加Activity与注入对象的映射
-     * @param element
      */
     public void parseBindActivity(Element element){
         BindActivity relation = element.getAnnotation(BindActivity.class);
@@ -168,7 +167,6 @@ public class FerrymanProcessor extends AbstractProcessor {
 
     /**
      * 添加Activity与注入对象的映射规则
-     * @param element
      */
     public void parseRelations(Element element){
         ActivityRelation relation = element.getAnnotation(ActivityRelation.class);

@@ -3,7 +3,7 @@ package com.jude.ferryman.internal.inject;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.jude.ferryman.FerrymanConfig;
+import com.jude.ferryman.FerrymanSetting;
 import com.jude.ferryman.internal.router.Router;
 import com.jude.ferryman.internal.router.Url;
 
@@ -40,10 +40,10 @@ public abstract class Porter {
     }
 
     public static <T> T toObject(Class<T> tClass, String object){
-        return (T) FerrymanConfig.findConverter(tClass).decode(tClass,object);
+        return (T) FerrymanSetting.findConverter(tClass).decode(tClass,object);
     }
 
     public static String fromObject(Class<?> tClass, Object object){
-        return FerrymanConfig.findConverter(tClass).encode(tClass,object);
+        return FerrymanSetting.findConverter(tClass).encode(tClass,object);
     }
 }

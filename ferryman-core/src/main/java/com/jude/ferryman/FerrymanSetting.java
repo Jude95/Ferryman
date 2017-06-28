@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by zhuchenxi on 2017/1/17.
  */
 
-public class FerrymanConfig {
+public class FerrymanSetting {
     private static ArrayList<Router.Factory> mRouterFactories = new ArrayList<>();
     private static ArrayList<Converter.Factory> mConverterFactories = new ArrayList<>();
 
