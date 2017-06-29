@@ -3,11 +3,11 @@
 解决项目初具规模后，页面跳转，传参，页面路由等功能代码十分冗余的问题。  
 主要功能：
 
-1. Android端页面路由，与web页面路由统一，非常便捷的由web跳转activity页面并携带参数
-2. 使用使用自动生成的函数进行Activity跳转代码，将页面所需数据作为了函数参数。
-3. Activity返回监听功能，不再需要重写`onActivityResult`方法，还能自动装箱返回数据并返回。
+1. Android 端页面路由，与 web 页面路由统一，非常便捷的由 web 跳转 activity 页面并携带参数
+2. 使用使用自动生成的函数进行 Activity 跳转代码，将页面所需数据作为了函数参数。
+3. Activity 返回监听功能，不再需要重写 `onActivityResult` 方法，还能自动装箱返回数据并返回。
 
-全库没有一个反射，纯依靠APT实现。  
+全库没有一个反射，纯依靠 APT 实现。  
 使用简洁直观的代码处理页面跳转：
 ```java
 Ferryman.from(MainActivity.this)
@@ -37,9 +37,9 @@ Ferryman.from(MainActivity.this)
 ## Usage
 
 ### 页面路由
-使用`@Page`注解标记Activity。  
-默认将使用Activity包名作为URL。  
-可以填入页面URL，进行URL路由。一个Activity可以有多个地址。一个地址只能对应一个Activity。  
+使用 `@Page` 注解标记Activity。  
+默认将使用 Activity 包名作为 URL。  
+可以填入页面 URL，进行 URL 路由。一个 Activity 可以有多个地址。一个地址只能对应一个 Activity。  
 ```java
 @Page("activity://two")
 public class ActivityTwo extends Activity{
@@ -51,11 +51,11 @@ Ferryman.from(ctx).gotoActivityTwo());
 //Url 方式启动页面
  RouterDriver.startActivity(this,"activity://two");
 ```
-然后就可以使用上面2种优雅的Activity跳转方法了。
+然后就可以使用上面2种优雅的 Activity 跳转方法了。
 
 ### 参数处理
-使用`@Params`注解标记参数。  
-在Activity中可以直接使用`Ferryman.unboxingData(this);`对参数数据拆箱并注入Activity。    
+使用 `@Params` 注解标记参数。  
+在 Activity 中可以直接使用 `Ferryman.unboxingData(this);` 对参数数据拆箱并注入 Activity。    
 ```java
 @Page("activity://phoneNumber")
 public class NumberInputActivity extends AppCompatActivity {
@@ -79,8 +79,8 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 ```
 
 ### 返回数据
-使用`@Result`注解标记返回数据。  
-使用`Ferryman.boxingData(this);`将参数装箱并塞入Activity。  
+使用 `@Result` 注解标记返回数据。  
+使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
 ```java
 @Page
 public class NameInputActivity extends AppCompatActivity {
@@ -119,8 +119,8 @@ Ferryman.from(MainActivity.this)
 ```
 
 ### 数据注入抽取
-参数及返回数据可以定义在非Activity类里，只要**与Activity建立关联**。  
-1. 通过`@BindActivity`注解直接关联。
+参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。  
+1. 通过 `@BindActivity` 注解直接关联。
 ```java
 @BindActivity(ActivityTwo.class)
 public class ActivityTwoData {
@@ -143,7 +143,7 @@ Ferryman.unboxingDataFrom(activity).to(this);
 Ferryman.boxingDataIn(this).to(mActivity);
 ```
 ### 自定义路由
-允许自己处理未被绑定Activity的url。返回null则表示不能处理这个url。  
+允许自己处理未被绑定 Activity 的 url。返回 null 则表示不能处理这个 url。  
 ```java
 FerrymanSetting.addRouterFactory(new Router.Factory() {
     @Override
@@ -152,14 +152,14 @@ FerrymanSetting.addRouterFactory(new Router.Factory() {
     }
 });
 ```
-如果可以处理这个url，则返回处理Router  
+如果可以处理这个 url，则返回处理 Router  
 ```java
 public interface Router {
     Intent start(@NonNull Context context, @NonNull String url);
 }
 ```
 ### 自定义数据传递序列化
-默认提供Gson实现的对象序列化，可以添加自定义序列化方式。返回null表示不能处理这个类型。  
+默认提供 Gson 实现的对象序列化，可以添加自定义序列化方式。返回 null 表示不能处理这个类型。  
 ```java
 FerrymanSetting.addConverterFactory(new Converter.Factory() {
     @Override
@@ -168,7 +168,7 @@ FerrymanSetting.addConverterFactory(new Converter.Factory() {
     }
 });
 ```
-如果可以处理这个类型，则返回处理Converter  
+如果可以处理这个类型，则返回处理 Converter  
 ```java
 public interface Converter {
     String encode(Type type,Object object);
