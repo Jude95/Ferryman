@@ -19,7 +19,7 @@ public class ActivityResultHooker {
      */
     public static void startHookFragment(Activity activity, Intent rawIntent, OnActivityResultListener listener){
         HookFragment fragment = getValidFragment((FragmentActivity) activity);
-        fragment.startActivityForResult(0, rawIntent, listener);
+        fragment.startActivityForResult(rawIntent, listener);
     }
 
     /**
