@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 
 public class ActivityResultHooker {
 
-    private static final String TAG = "ActivityResultHooker";
+    private static final String TAG = "FerrymanActivityResultHooker";
 
     /**
      * 适用于startActivityForResult()的两个重写的方法的hook启动

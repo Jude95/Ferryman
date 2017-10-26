@@ -101,7 +101,6 @@ public class FerrymanProcessor extends AbstractProcessor {
             writeActivityPorterFile();
             writeResultFile();
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return true;
     }
