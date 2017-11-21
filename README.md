@@ -183,7 +183,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用，需要
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.1.0'
+        classpath 'com.jude:ferryman-modular:1.1.1'
     }
 }
 
