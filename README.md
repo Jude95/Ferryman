@@ -31,8 +31,8 @@ Ferryman.from(MainActivity.this)
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.0.1'
-    annotationProcessor 'com.jude:ferryman-compiler:1.0.1'
+    compile 'com.jude:ferryman-core:1.1.0'
+    annotationProcessor 'com.jude:ferryman-compiler:1.1.0'
 
 ## Usage
 
@@ -175,6 +175,20 @@ public interface Converter {
 
     Object decode(Type type,String string);
 }
+```
+
+## Library中使用
+Ferryman 可以被使用在 Library 中，Library 中如上正常使用，需要添加 `annotationProcessor`。
+而在 app 中，需要添加额外一个`ferryman-modular`插件来合并库中自带的路由。
+```grovvy
+buildscript {
+    dependencies {
+        classpath 'com.jude:ferryman-modular:1.1.0'
+    }
+}
+
+apply plugin: 'com.jude.ferryman-modular'
+
 ```
 
 License

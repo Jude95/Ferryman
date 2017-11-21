@@ -1,13 +1,14 @@
 package com.jude.ferryman.module.framework;
 
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
-public class JarWriter {
+public class JarWriter implements Closeable{
 
     private final JarOutputStream jos;
 
@@ -17,17 +18,9 @@ public class JarWriter {
     }
 
     public void write(String relativePath, byte[] bytes) throws IOException {
-        if (!relativePath.endsWith(".class")) {
-            ZipEntry entry = new ZipEntry(relativePath);
-            jos.putNextEntry(entry);
-            jos.write(bytes);
-        } else {
-            if (bytes != null) {
-                ZipEntry entry = new ZipEntry(relativePath);
-                jos.putNextEntry(entry);
-                jos.write(bytes);
-            }
-        }
+        ZipEntry entry = new ZipEntry(relativePath);
+        jos.putNextEntry(entry);
+        jos.write(bytes);
     }
 
     public void close() throws IOException {

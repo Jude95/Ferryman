@@ -1,6 +1,5 @@
 package com.jude.ferryman.module.entry;
 
-import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.ArrayList;
@@ -49,10 +48,18 @@ public class FerrymanInfo {
         this.mMapMethods.add(mMapMethod);
     }
 
-    public void combine(FerrymanInfo info){
+    public void combine(FerrymanInfo info) {
         mBoatMethods.addAll(info.mBoatMethods);
         mInjectorMethods.addAll(info.mInjectorMethods);
         mSiphonMethods.addAll(info.mSiphonMethods);
         mMapMethods.addAll(info.mMapMethods);
+    }
+
+    @Override
+    public String toString() {
+        return "mBoatMethods" + mBoatMethods.size() + "\n"
+                + "mInjectorMethods" + mInjectorMethods.size() + "\n"
+                + "mSiphonMethods" + mSiphonMethods.size() + "\n"
+                + "mMapMethods" + mMapMethods.size() + "\n";
     }
 }

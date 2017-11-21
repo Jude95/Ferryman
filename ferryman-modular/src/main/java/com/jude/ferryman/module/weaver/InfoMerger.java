@@ -1,8 +1,8 @@
-package com.jude.ferryman.module.collect;
+package com.jude.ferryman.module.weaver;
 
 import com.jude.ferryman.module.entry.FerrymanInfo;
 import com.jude.ferryman.module.framework.ContextReader;
-import com.jude.ferryman.module.framework.JarContentProvider;
+import com.jude.ferryman.module.framework.DirectoryContentProvider;
 import com.jude.ferryman.module.framework.TransformContext;
 import com.jude.ferryman.module.log.Log;
 
@@ -10,22 +10,21 @@ import com.jude.ferryman.module.log.Log;
  * Created by Jude on 2017/11/20.
  */
 
-public class InfoCollector {
+public class InfoMerger {
     TransformContext transformContext;
 
-    public InfoCollector(TransformContext transformContext) {
+    public InfoMerger(TransformContext transformContext) {
         this.transformContext = transformContext;
     }
 
-    public FerrymanInfo readInfo() {
-        ContextReader reader = new ContextReader(transformContext,new JarContentProvider());
-        CollectClassHandler handler = new CollectClassHandler();
+    public void mergeInfo(FerrymanInfo info) {
+        ContextReader reader = new ContextReader(transformContext,new DirectoryContentProvider());
+        MergeClassHandler handler = new MergeClassHandler(transformContext, info);
         try {
             reader.accept(handler);
         } catch (Exception e) {
             Log.e("collect library ferryman info error",e);
         }
-        return handler.getInfo();
     }
 
 

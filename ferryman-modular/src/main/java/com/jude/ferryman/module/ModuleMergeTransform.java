@@ -8,6 +8,7 @@ import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.jude.ferryman.module.collect.InfoCollector;
 import com.jude.ferryman.module.entry.FerrymanInfo;
 import com.jude.ferryman.module.framework.TransformContext;
+import com.jude.ferryman.module.log.Log;
 import com.jude.ferryman.module.weaver.InfoMerger;
 
 import org.gradle.api.Project;
@@ -49,7 +50,9 @@ public class ModuleMergeTransform extends Transform{
     @Override
     public void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         TransformContext context = new TransformContext(transformInvocation);
+        Log.i(context.toString());
         FerrymanInfo info = new InfoCollector(context).readInfo();
+        Log.i(info.toString());
         new InfoMerger(context).mergeInfo(info);
     }
 }

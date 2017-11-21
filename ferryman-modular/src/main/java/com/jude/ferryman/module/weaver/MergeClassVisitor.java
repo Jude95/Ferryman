@@ -2,10 +2,12 @@ package com.jude.ferryman.module.weaver;
 
 import com.jude.ferryman.module.entry.FerrymanInfo;
 import com.jude.ferryman.module.entry.MethodType;
+import com.jude.ferryman.module.log.Log;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /**
@@ -24,18 +26,22 @@ public class MergeClassVisitor extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
+        Log.i("collect class "+name);
         switch (name){
-            case "com.jude.ferryman.Injector":
+            case "com/jude/ferryman/internal/Injector":
                 methodType = MethodType.Injector;
                 break;
-            case "com.jude.ferryman.Siphon":
+            case "com/jude/ferryman/internal/Siphon":
                 methodType = MethodType.Siphon;
                 break;
-            case "com.jude.ferryman.RouterMap":
+            case "com/jude/ferryman/internal/RouterMap":
                 methodType = MethodType.RouterMap;
                 break;
-            case "com.jude.ferryman.Boat":
+            case "com/jude/ferryman/Boat":
                 methodType = MethodType.Boat;
+                for (MethodNode methodNode : info.getBoatMethods()) {
+                    methodNode.accept(cv);
+                }
                 break;
             default:
                 methodType = MethodType.Other;
@@ -50,30 +56,33 @@ public class MergeClassVisitor extends ClassVisitor {
             case RouterMap:
                 if (name.equals("initTable")){
                     for (MethodNode methodNode : info.getMapMethods()) {
-                        next =  new ConcatMethodVisitor(next,methodNode);
+                        insertMethod(methodNode,next);
                     }
                 }
                 break;
             case Siphon:
                 if (name.equals("to")) {
                     for (MethodNode methodNode : info.getSiphonMethods()) {
-                        next =  new ConcatMethodVisitor(next,methodNode);
+                        insertMethod(methodNode,next);
                     }
                 }
                 break;
             case Injector:
                 if (name.equals("to")) {
                     for (MethodNode methodNode : info.getInjectorMethods()) {
-                        next =  new ConcatMethodVisitor(next,methodNode);
+                        insertMethod(methodNode,next);
                     }
-                }
-                break;
-            case Boat:
-                for (MethodNode methodNode : info.getBoatMethods()) {
-                    methodNode.accept(cv);
                 }
                 break;
         }
         return next;
+    }
+
+    private void insertMethod(MethodNode methodNode,MethodVisitor mv){
+        AbstractInsnNode insnNode = methodNode.instructions.getFirst();
+        while (insnNode!=null&&insnNode.getOpcode()!=Opcodes.RETURN){
+            insnNode.accept(mv);
+            insnNode = insnNode.getNext();
+        }
     }
 }

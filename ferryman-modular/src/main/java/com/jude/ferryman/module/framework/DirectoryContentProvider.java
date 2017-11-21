@@ -4,6 +4,7 @@ import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.QualifiedContent;
 import com.android.build.api.transform.Status;
 import com.google.common.io.Files;
+import com.jude.ferryman.module.log.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,12 +23,15 @@ public class DirectoryContentProvider extends TargetedQualifiedContentProvider {
     @Override
     public void forEach(QualifiedContent content, ClassHandler processor) throws IOException {
         if (processor.onStart(content)) {
+            Log.i("start trans dir "+content.getName());
+
             File root = content.getFile();
             URI base = root.toURI();
             for (File f : Files.fileTreeTraverser().preOrderTraversal(root)) {
                 if (f.isFile() && f.getName().endsWith(".class")) {
                     byte[] data = Files.toByteArray(f);
                     String relativePath = base.relativize(f.toURI()).toString();
+//                    Log.i("start trans class "+relativePath);
                     processor.onClassFetch(content, Status.ADDED, relativePath, data);
                 }
             }

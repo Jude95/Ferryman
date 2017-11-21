@@ -22,7 +22,7 @@ android {
 
 dependencies {
     provided 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile project(':ferryman-annotation')
     provided project(':ferryman-placeholder')
     testCompile 'junit:junit:4.12'

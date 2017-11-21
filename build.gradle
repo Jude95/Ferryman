@@ -8,7 +8,7 @@ buildscript {
         bintrayKey = properties.getProperty('bintrayKey')
 
         ferryman_group = 'com.jude'
-        ferryman_version = '1.0.2-alpha5'
+        ferryman_version = '1.1.1'
     }
     repositories {
         google()
@@ -18,10 +18,10 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.jude:ferryman-module:1.0.2-alpha4'
+        classpath 'com.jude:ferryman-modular:1.1.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -36,8 +36,8 @@ allprojects {
 
 subprojects {pro ->
     if (!pro.name.startsWith("ferryman-"))return
+    println pro.name+" config"
 
-    println pro.name
     version = ferryman_version
     group = ferryman_group
 
@@ -79,10 +79,9 @@ task uploadAll { task ->
         project.tasks.build.mustRunAfter project.tasks.clean
 
         project.subprojects {
-            println it.name
             if (it.name.startsWith("ferryman-")) {
-
-                var upload = it.tasks.bintrayUpload
+//                println it.name+" "+it.tasks
+                Task upload = it.tasks.bintrayUpload
                 task.dependsOn upload
                 upload.mustRunAfter project.tasks.build
             }

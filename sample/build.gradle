@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jude.ferryman'
+apply plugin: 'com.jude.ferryman-modular'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
