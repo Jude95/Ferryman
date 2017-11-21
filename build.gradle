@@ -8,16 +8,20 @@ buildscript {
         bintrayKey = properties.getProperty('bintrayKey')
 
         ferryman_group = 'com.jude'
-        ferryman_version = '1.0.1'
+        ferryman_version = '1.0.2-alpha5'
     }
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://dl.bintray.com/jude95/maven"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.jude:ferryman-module:1.0.2-alpha4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -31,8 +35,9 @@ allprojects {
 }
 
 subprojects {pro ->
-    if (pro.name == 'sample')return
+    if (!pro.name.startsWith("ferryman-"))return
 
+    println pro.name
     version = ferryman_version
     group = ferryman_group
 
@@ -46,6 +51,8 @@ subprojects {pro ->
             package_version = version
             package_description = 'A tool for Android'
 
+            siteUrl = 'https://github.com/Jude95/Ferryman'
+            gitUrl = 'https://github.com/Jude95/Ferryman'
 
             //开发者信息
             developerId = 'jude95'
@@ -56,7 +63,7 @@ subprojects {pro ->
 
             licenseName = 'The Apache Software License, Version 2.0'
             licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            allLicenses = ["Apache-2.0"]
+            allLicenses = 'Apache-2.0'
         }
         project.apply from:'https://raw.githubusercontent.com/Jude95/JCenter/v2/bintray.gradle'
     }
@@ -72,8 +79,10 @@ task uploadAll { task ->
         project.tasks.build.mustRunAfter project.tasks.clean
 
         project.subprojects {
-            if (it.name != 'sample') {
-                Task upload = it.tasks.bintrayUpload
+            println it.name
+            if (it.name.startsWith("ferryman-")) {
+
+                var upload = it.tasks.bintrayUpload
                 task.dependsOn upload
                 upload.mustRunAfter project.tasks.build
             }

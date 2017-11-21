@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  *
  * 目标Activity所接受的参数注解
  */
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Params {
     String value() default "";

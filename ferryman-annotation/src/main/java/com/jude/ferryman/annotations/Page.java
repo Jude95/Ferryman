@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Page {
     /**
      * 某个类的路由信息

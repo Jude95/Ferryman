@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
+
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+
+
 
     defaultConfig {
         minSdkVersion 15
@@ -12,18 +14,22 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
-    provided 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile project(':ferryman-annotation')
-    provided project(':ferryman-placeholder')
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile project(':ferryman-core')
+    annotationProcessor project(':ferryman-compiler')
+
 }

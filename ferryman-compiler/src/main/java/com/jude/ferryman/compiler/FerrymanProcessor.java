@@ -3,8 +3,8 @@ package com.jude.ferryman.compiler;
 import com.google.auto.common.SuperficialValidation;
 import com.google.auto.service.AutoService;
 import com.jude.ferryman.annotations.ActivityRelation;
-import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.BindActivity;
+import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.Params;
 import com.jude.ferryman.annotations.Result;
 import com.jude.ferryman.compiler.generator.AddressGenerator;
@@ -36,6 +36,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -81,6 +82,9 @@ public class FerrymanProcessor extends AbstractProcessor {
 
     private Set<Class<? extends Annotation>> getSupportedAnnotations() {
         Set<Class<? extends Annotation>> annotations = new LinkedHashSet<>();
+
+        // 确保处理器一定会被执行
+        annotations.add(Override.class);
 
         annotations.add(ActivityRelation.class);
         annotations.add(BindActivity.class);
@@ -211,7 +215,7 @@ public class FerrymanProcessor extends AbstractProcessor {
         }
         VariableElement variableElement = (VariableElement) element;
         Params params = element.getAnnotation(Params.class);
-        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType().toString()));
+        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType()));
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addParams(info);
         InjectClassInfo injectClassInfo = findInjectClassInfo(activityInfo,element);
@@ -229,7 +233,7 @@ public class FerrymanProcessor extends AbstractProcessor {
         }
         VariableElement variableElement = (VariableElement) element;
         Result result = element.getAnnotation(Result.class);
-        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),result.value(),convertClass(element.asType().toString()));
+        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),result.value(),convertClass(element.asType()));
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addResult(info);
         InjectClassInfo injectClassInfo = findInjectClassInfo(activityInfo,element);
@@ -295,25 +299,8 @@ public class FerrymanProcessor extends AbstractProcessor {
         messager.printMessage(Diagnostic.Kind.NOTE, String.format(message, args));
     }
 
-    private static TypeName convertClass(String originClazz) {
-        switch (originClazz) {
-            case "int":
-                return TypeName.INT;
-            case "long":
-                return TypeName.LONG;
-            case "float":
-                return TypeName.FLOAT;
-            case "double":
-                return TypeName.DOUBLE;
-            case "short":
-                return TypeName.SHORT;
-            case "boolean":
-                return TypeName.BOOLEAN;
-            case "char":
-                return TypeName.CHAR;
-            default:
-                return ClassName.bestGuess(originClazz);
-        }
+    private static TypeName convertClass(TypeMirror typeMirror) {
+        return TypeName.get(typeMirror);
     }
 
 }

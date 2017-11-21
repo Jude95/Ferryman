@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile gradleApi()
+    compileOnly "com.android.tools.build:gradle:2.3.2"
+    compile "com.google.code.gson:gson:2.8.2"
+    testCompile 'junit:junit:4.12'
+    compile "org.ow2.asm:asm-all:5.1"
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
