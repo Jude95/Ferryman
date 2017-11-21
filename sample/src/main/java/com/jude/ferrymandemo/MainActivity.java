@@ -49,7 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 };
             }
         });
-        RouterDriver.startActivity(this,"what a fuck");
+
+        findViewById(R.id.btn_library).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RouterDriver.startActivity(MainActivity.this,"library://test_library");
+            }
+        });
+
         tvName = (TextView) findViewById(R.id.tv_name);
         tvNumber = (TextView) findViewById(R.id.tv_number);
         btnInputName = (Button) findViewById(R.id.btn_name);
