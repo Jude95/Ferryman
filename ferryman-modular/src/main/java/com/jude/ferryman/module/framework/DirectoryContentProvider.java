@@ -28,10 +28,9 @@ public class DirectoryContentProvider extends TargetedQualifiedContentProvider {
             File root = content.getFile();
             URI base = root.toURI();
             for (File f : Files.fileTreeTraverser().preOrderTraversal(root)) {
-                if (f.isFile() && f.getName().endsWith(".class")) {
+                if (f.isFile()) {
                     byte[] data = Files.toByteArray(f);
                     String relativePath = base.relativize(f.toURI()).toString();
-//                    Log.i("start trans class "+relativePath);
                     processor.onClassFetch(content, Status.ADDED, relativePath, data);
                 }
             }

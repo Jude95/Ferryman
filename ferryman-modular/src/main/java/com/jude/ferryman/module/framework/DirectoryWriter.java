@@ -1,13 +1,13 @@
-package com.jude.ferryman.module.weaver;
+package com.jude.ferryman.module.framework;
 
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
 
-class DirectoryWriter {
+public class DirectoryWriter {
 
-    void write(File relativeRoot, String relativePath, byte[] bytes) throws IOException {
+    public void write(File relativeRoot, String relativePath, byte[] bytes) throws IOException {
         if (bytes != null) {
             File target = toSystemDependentFile(relativeRoot, relativePath);
             Files.createParentDirs(target);

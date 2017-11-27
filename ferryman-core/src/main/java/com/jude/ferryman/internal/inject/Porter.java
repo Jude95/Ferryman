@@ -7,6 +7,7 @@ import com.jude.ferryman.FerrymanSetting;
 import com.jude.ferryman.internal.router.Router;
 import com.jude.ferryman.internal.router.Url;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 
@@ -39,11 +40,11 @@ public abstract class Porter {
         activity.setResult(Activity.RESULT_OK,intent);
     }
 
-    public static <T> T toObject(Class<T> tClass, String object){
-        return (T) FerrymanSetting.findConverter(tClass).decode(tClass,object);
+    public static <T> T toObject(Type type, String object){
+        return (T) FerrymanSetting.findConverter(type).decode(type,object);
     }
 
-    public static String fromObject(Class<?> tClass, Object object){
-        return FerrymanSetting.findConverter(tClass).encode(tClass,object);
+    public static String fromObject(Type type, Object object){
+        return FerrymanSetting.findConverter(type).encode(type,object);
     }
 }

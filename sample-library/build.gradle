@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jude.ferryman-modular'
 
 android {
     compileSdkVersion 26
@@ -29,7 +30,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile project(':ferryman-core')
-    annotationProcessor project(':ferryman-compiler')
+    compile "com.jude:ferryman-core:$ferryman_version_compile"
+    annotationProcessor "com.jude:ferryman-compiler:$ferryman_version_compile"
 
 }

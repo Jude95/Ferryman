@@ -6,6 +6,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
@@ -97,8 +98,11 @@ public class PorterGenerator extends ClassGenerator {
                 .addParameter(info.getName(), PARAMS_OBJECT)
                 .addParameter(ClassName.bestGuess(CLASS_ACTIVITY), PARAMS_ACTIVITY)
                 .addStatement("$T<String,String> params = readParams(activity)",Map.class);
+        int number = 0;
         for (FieldInfo fieldInfo : info.getParams()) {
-            methodBuilder.addStatement("object.$L = toObject($L.class,params.get($S))",fieldInfo.getName(),fieldInfo.getClazz(),fieldInfo.getKey());
+            generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
+            methodBuilder.addStatement("object.$L = toObject(type$L$L$L,params.get($S))",fieldInfo.getName(),number,0,0,fieldInfo.getKey());
+            number++;
         }
         builder.addMethod(methodBuilder.build());
     }
@@ -128,5 +132,23 @@ public class PorterGenerator extends ClassGenerator {
         methodBuilder.addStatement("writeResult(results,activity)");
         builder.addMethod(methodBuilder.build());
     }
+
+    private void generateType(MethodSpec.Builder builder, TypeName typeName,int number, int index, int deep){
+        TypeName typeToken = ClassName.bestGuess("com.google.gson.reflect.TypeToken");
+        TypeName type = ClassName.bestGuess("java.lang.reflect.Type");
+        if (typeName instanceof ParameterizedTypeName){
+            for (int i = 0; i < ((ParameterizedTypeName) typeName).typeArguments.size(); i++) {
+                generateType(builder, ((ParameterizedTypeName) typeName).typeArguments.get(i),number,i,deep+1);
+            }
+            String argString = "";
+            for (int i = 0; i < ((ParameterizedTypeName) typeName).typeArguments.size(); i++) {
+                argString += ", type"+number+i+(deep+1);
+            }
+            builder.addStatement("$T type$L$L$L = $T.getParameterized($T.class"+argString+").getType()",type,number,index,deep,typeToken,((ParameterizedTypeName) typeName).rawType);
+        }else {
+            builder.addStatement("$T type$L$L$L = $T.get($T.class).getType()",type,number,index,deep,typeToken,typeName);
+        }
+    }
+
 
 }

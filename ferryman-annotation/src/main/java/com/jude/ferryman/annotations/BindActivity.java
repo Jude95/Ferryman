@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Created by zhuchenxi on 2017/1/20.
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface BindActivity {
     Class value();
 }

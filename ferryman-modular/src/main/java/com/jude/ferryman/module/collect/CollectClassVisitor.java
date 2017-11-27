@@ -36,27 +36,20 @@ public class CollectClassVisitor extends ClassVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        Log.i("collect class "+name);
-        switch (name){
-            case "com/jude/ferryman/internal/Injector":
-                methodType = MethodType.Injector;
-                intercepted = true;
-                break;
-            case "com/jude/ferryman/internal/Siphon":
-                methodType = MethodType.Siphon;
-                intercepted = true;
-                break;
-            case "com/jude/ferryman/internal/RouterMap":
-                methodType = MethodType.RouterMap;
-                intercepted = true;
-                break;
-            case "com/jude/ferryman/Boat":
-                methodType = MethodType.Boat;
-                intercepted = true;
-                break;
-            default:
-                methodType = MethodType.Other;
-                break;
+        if (name.matches("com/jude/ferryman.*/internal/Injector")){
+            methodType = MethodType.Injector;
+            intercepted = true;
+        }else if (name.matches("com/jude/ferryman.*/internal/Siphon")){
+            methodType = MethodType.Siphon;
+            intercepted = true;
+        }else if (name.matches("com/jude/ferryman.*/internal/RouterMap")){
+            methodType = MethodType.RouterMap;
+            intercepted = true;
+        }else if (name.matches("com/jude/ferryman.*/Boat")){
+            methodType = MethodType.Boat;
+            intercepted = true;
+        }else {
+            methodType = MethodType.Other;
         }
     }
 

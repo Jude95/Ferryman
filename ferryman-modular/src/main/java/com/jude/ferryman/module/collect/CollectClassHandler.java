@@ -53,7 +53,7 @@ class CollectClassHandler implements ClassHandler {
 
     @Override
     public void onClassFetch(QualifiedContent content, Status status, String relativePath, byte[] bytes) throws IOException {
-        if (relativePath.endsWith(".class")) {
+        if (relativePath.endsWith(".class")&&relativePath.contains("com/jude/ferryman")) {
             ClassReader cr = new ClassReader(bytes);
             CollectClassVisitor cv = new CollectClassVisitor();
             cr.accept(cv, 0);

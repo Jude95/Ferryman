@@ -2,7 +2,6 @@ package com.jude.ferryman.module.weaver;
 
 import com.jude.ferryman.module.entry.FerrymanInfo;
 import com.jude.ferryman.module.entry.MethodType;
-import com.jude.ferryman.module.log.Log;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -26,7 +25,6 @@ public class MergeClassVisitor extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
-        Log.i("collect class "+name);
         switch (name){
             case "com/jude/ferryman/internal/Injector":
                 methodType = MethodType.Injector;
