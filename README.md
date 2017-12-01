@@ -1,6 +1,5 @@
 # Ferryman Android页面路由框架
-
-解决项目初具规模后，页面跳转，传参，页面路由等功能代码十分冗余的问题。  
+主要解决项目初具规模后，页面跳转，传参，页面路由等功能代码十分冗余的问题且难以管理的问题。  
 主要功能：
 
 1. Android 端页面路由，与 web 页面路由统一，非常便捷的由 web 跳转 activity 页面并携带参数
@@ -28,7 +27,7 @@ Ferryman.from(MainActivity.this)
 ```  
 以及使用URL跳转
 ```java
-    RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
+RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 ```
 ## Dependency
 
@@ -50,7 +49,7 @@ public class ActivityTwo extends Activity{
 Ferryman.from(ctx).gotoActivityTwo());
 
 //Url 方式启动页面
- RouterDriver.startActivity(this,"activity://two");
+RouterDriver.startActivity(this,"activity://two");
 ```
 然后就可以使用上面2种优雅的 Activity 跳转方法了。
 
@@ -74,12 +73,12 @@ public class NumberInputActivity extends AppCompatActivity {
 //API 方式
 Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 
-//Url方式
- RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
+//Url方式 注意url的参数要经过Encode
+RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 
 ```
 如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
-
+**注解参数支持 DeepLink**可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
 使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
