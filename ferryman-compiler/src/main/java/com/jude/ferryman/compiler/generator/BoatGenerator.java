@@ -126,7 +126,7 @@ public class BoatGenerator extends ClassGenerator {
                         ClassName.bestGuess(Constants.CLASS_WARDEN),
                         resultType);
             }
-            methodBuilder.addStatement("$T.startActivity($L,builder.build().toString(),warden.innerListener)",
+            methodBuilder.addStatement("$T.startActivityFromAPI($L,builder.build().toString(),warden.innerListener)",
                     ClassName.bestGuess(Constants.CLASS_ROUTERDRIVER),
                     PARAMETER_CONTEXT
                     );

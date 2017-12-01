@@ -101,7 +101,10 @@ public class PorterGenerator extends ClassGenerator {
         int number = 0;
         for (FieldInfo fieldInfo : info.getParams()) {
             generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
-            methodBuilder.addStatement("object.$L = toObject(type$L$L$L,params.get($S))",fieldInfo.getName(),number,0,0,fieldInfo.getKey());
+            methodBuilder
+                    .beginControlFlow("if (params.containsKey($S))",fieldInfo.getKey())
+                    .addStatement("object.$L = toObject(type$L$L$L,params.get($S))",fieldInfo.getName(),number,0,0,fieldInfo.getKey())
+                    .endControlFlow();
             number++;
         }
         builder.addMethod(methodBuilder.build());

@@ -7,6 +7,7 @@
 2. 使用使用自动生成的函数进行 Activity 跳转代码，将页面所需数据作为了函数参数。
 3. Activity 返回监听功能，不再需要重写 `onActivityResult` 方法，还能自动装箱返回数据并返回。
 
+支持Kotlin, 支持在 Library 中使用。  
 全库没有一个反射，纯依靠 APT 实现。  
 使用简洁直观的代码处理页面跳转：
 ```java
@@ -31,12 +32,12 @@ Ferryman.from(MainActivity.this)
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.1.0'
-    annotationProcessor 'com.jude:ferryman-compiler:1.1.0'
+    compile 'com.jude:ferryman-core:1.1.3'
+    annotationProcessor 'com.jude:ferryman-compiler:1.1.3'
 
 ## Usage
 
-### 页面路由
+### 1. 页面路由
 使用 `@Page` 注解标记Activity。  
 默认将使用 Activity 包名作为 URL。  
 可以填入页面 URL，进行 URL 路由。一个 Activity 可以有多个地址。一个地址只能对应一个 Activity。  
@@ -53,7 +54,7 @@ Ferryman.from(ctx).gotoActivityTwo());
 ```
 然后就可以使用上面2种优雅的 Activity 跳转方法了。
 
-### 参数处理
+### 2. 页面参数
 使用 `@Params` 注解标记参数。  
 在 Activity 中可以直接使用 `Ferryman.unboxingData(this);` 对参数数据拆箱并注入 Activity。    
 ```java
@@ -77,8 +78,9 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
  RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 
 ```
+如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
 
-### 返回数据
+### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
 使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
 ```java
@@ -117,13 +119,14 @@ Ferryman.from(MainActivity.this)
 
         });
 ```
+如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
 
-### 数据注入抽取
+### 4. 页面数据注入抽取
 参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。  
 1. 通过 `@BindActivity` 注解直接关联。
 ```java
-@BindActivity(ActivityTwo.class)
-public class ActivityTwoData {
+@BindActivity(ShopActivity.class)
+public class ShopPresenter {
     @Params
     public String wtf;
     @Params
@@ -142,7 +145,7 @@ Ferryman.unboxingDataFrom(activity).to(this);
 // 装箱保存数据
 Ferryman.boxingDataIn(this).to(mActivity);
 ```
-### 自定义路由
+### 5. 自定义路由
 允许自己处理未被绑定 Activity 的 url。返回 null 则表示不能处理这个 url。  
 ```java
 FerrymanSetting.addRouterFactory(new Router.Factory() {
@@ -158,32 +161,28 @@ public interface Router {
     Intent start(@NonNull Context context, @NonNull String url);
 }
 ```
-### 自定义数据传递序列化
+### 6. 自定义数据传递序列化
 默认提供 Gson 实现的对象序列化，可以添加自定义序列化方式。返回 null 表示不能处理这个类型。  
 ```java
-FerrymanSetting.addConverterFactory(new Converter.Factory() {
-    @Override
-    public Converter createConverter(Type type) {
-        return null;
-    }
-});
+FerrymanSetting.addConverterFactory(Converter.Factory factory);
 ```
-如果可以处理这个类型，则返回处理 Converter  
-```java
-public interface Converter {
-    String encode(Type type,Object object);
 
-    Object decode(Type type,String string);
-}
+### 7. URL 拦截器
+提供注册拦截器，对需要跳转的url进行一些批处理。
+```java
+// url 方式的跳转
+FerrymanSetting.addUrlInterceptors.addUrlInterceptors(RouterInterceptor interceptor);
+// api 方式的跳转
+FerrymanSetting.addAPIInterceptors.addUrlInterceptors(RouterInterceptor interceptor);
 ```
 
 ## Library中使用
-Ferryman 可以被使用在 Library 中，Library 中如上正常使用，需要添加 `annotationProcessor`。
-而在 app 中，需要添加额外一个`ferryman-modular`插件来合并库中自带的路由。
+Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要添加 `annotationProcessor`)。
+但在 app 与 Library 中都需要添加额外添加一个`ferryman-modular`插件来合并库中自带的路由。
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.1.1'
+        classpath 'com.jude:ferryman-modular:1.1.3'
     }
 }
 

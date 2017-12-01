@@ -1,1 +1,1 @@
-include ':sample',':ferryman-annotation',':ferryman-compiler', ':ferryman-placeholder',':ferryman-core', ':sample-library', ':ferryman-modular'
+include ':sample',':ferryman-annotation',':ferryman-compiler', ':ferryman-placeholder',':ferryman-core', ':ferryman-modular', ':sample-library'

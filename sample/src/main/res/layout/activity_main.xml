@@ -12,10 +12,18 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <Button
-        android:text="start library"
+        android:text="Start Library Activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAllCaps="false"
         android:id="@+id/btn_library"/>
+
+    <Button
+        android:text="Start Deeplink Activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:id="@+id/btn_deeplink"/>
 
     <LinearLayout
         android:layout_width="match_parent"

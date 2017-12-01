@@ -2,6 +2,7 @@ package com.jude.ferrymandemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 return new Router() {
                     @Override
                     public Intent start(@NonNull Context context, @NonNull String url) {
-                        Log.i("Fuck","fuck:"+url);
+                        Log.i("Fuck","second:"+url);
                         return null;
                     }
                 };
@@ -56,7 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 RouterDriver.startActivity(MainActivity.this,"library://test_library");
             }
         });
-
+        findViewById(R.id.btn_deeplink).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri url = Uri.parse("deeplink://ferrymandemo?name=Lucy&time=13987");
+                intent.setData(url);
+                startActivity(intent);
+            }
+        });
         tvName = (TextView) findViewById(R.id.tv_name);
         tvNumber = (TextView) findViewById(R.id.tv_number);
         btnInputName = (Button) findViewById(R.id.btn_name);

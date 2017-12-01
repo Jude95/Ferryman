@@ -262,8 +262,7 @@ public class FerrymanProcessor extends AbstractProcessor {
             String activityName = parent.getQualifiedName().toString();
             activityInfo = findActivityByName(activityName);
             if (activityInfo == null){
-                error("activity without com.jude.ferryman.annotations error for %s",activityName);
-                throw new IllegalStateException();
+                throw new IllegalStateException(String.format("activity without com.jude.ferryman.annotations error for %s",activityName));
             }
         }else {
             String objectName = parent.getQualifiedName().toString();

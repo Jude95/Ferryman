@@ -4,6 +4,16 @@
     <application>
 
         <activity android:name=".LibraryActivity"/>
-        <activity android:name=".FuckerActivity"/>
+        <activity android:name=".SecondActivity"/>
+        <activity android:name=".DeepLinkActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="ferrymandemo"
+                    android:scheme="deeplink" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

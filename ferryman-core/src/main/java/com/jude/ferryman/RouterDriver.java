@@ -19,12 +19,22 @@ import static com.jude.ferryman.internal.router.Router.REQUEST_DATA;
 public class RouterDriver {
 
     public static void startActivity(Context ctx, String url){
-        Intent intent = getIntent(ctx, url);
+        Intent intent = getIntent(ctx, FerrymanSetting.interceptUrl(url));
         startIntent(ctx,intent,null);
     }
 
     public static void startActivity(Context ctx, String url, OnActivityResultListener listener){
-        Intent intent = getIntent(ctx, url);
+        Intent intent = getIntent(ctx, FerrymanSetting.interceptUrl(url));
+        startIntent(ctx,intent,listener);
+    }
+
+    static void startActivityFromAPI(Context ctx, String url){
+        Intent intent = getIntent(ctx, FerrymanSetting.interceptAPI(url));
+        startIntent(ctx,intent,null);
+    }
+
+    static void startActivityFromAPI(Context ctx, String url, OnActivityResultListener listener){
+        Intent intent = getIntent(ctx, FerrymanSetting.interceptAPI(url));
         startIntent(ctx,intent,listener);
     }
 

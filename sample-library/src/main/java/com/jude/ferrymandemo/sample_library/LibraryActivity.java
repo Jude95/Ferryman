@@ -8,6 +8,9 @@ import android.view.View;
 import com.jude.ferryman.Ferryman;
 import com.jude.ferryman.annotations.Page;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Jude on 2017/11/20.
  */
@@ -17,10 +20,25 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Ferryman.from(LibraryActivity.this).gotoFuckerActivity("A","B");
+                Ferryman.from(LibraryActivity.this).gotoSecondActivity("A",23);
+            }
+        });
+        findViewById(R.id.deeplink).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animal animal = new Animal();
+                animal.setName("beer");
+                animal.setAge(12);
+                animal.setSpeed(32.67);
+                Map<String,Integer> map = new HashMap<>();
+                map.put("A",1);
+                map.put("B",2);
+                map.put("C",123);
+                animal.setAttributes(map);
+                Ferryman.from(LibraryActivity.this).gotoDeepLinkActivity("beer",12580,animal);
             }
         });
     }

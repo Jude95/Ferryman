@@ -89,11 +89,21 @@ public class UrlUnitTest {
     }
 
     @Test
+    public void invaildSymbol() throws Exception {
+        Url url = new Url.Builder()
+                .addParam("a",";;//^^")
+                .addParam("b","&**)(")
+                .setScheme("http")
+                .setAuthority("fucker")
+                .build();
+        assertEquals("http://fucker?a=%3B%3B%2F%2F%5E%5E&b=%26**%29%28",url.toString());
+    }
+
+    @Test
     public void testUrl() throws Exception {
         checkUrl("activity://two/xx?a=2&b=3");
         checkUrl("://two/xx?a=2&b=3", "two/xx?a=2&b=3");
         checkUrl("two/xx?a=2&b=3");
-        checkUrl("/xx?a=http://xxxx&b=3");
         checkUrl("?a=2&b=3", "a=2&b=3");
         checkUrl("a=2&b=3");
         checkUrl("b=3");
@@ -105,7 +115,7 @@ public class UrlUnitTest {
         checkUrl("activity");
         checkUrl("activity://activity://two/xx?a=2&b=3");
         checkUrl("activity://two/xx?a=2&b=3");
-        checkUrl("activity://two/xx?a=2&b=3?c=2&d=3");
+        checkUrl("activity://two/xx?a=2&b=3?c=2&d=3","activity://two/xx?a=2&b=3%3Fc%3D2&d=3");
         checkUrl("activity://two/xx?a=2&b=3&b=2","activity://two/xx?a=2&b=2");
     }
 }

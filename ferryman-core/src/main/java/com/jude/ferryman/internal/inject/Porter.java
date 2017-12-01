@@ -8,6 +8,7 @@ import com.jude.ferryman.internal.router.Router;
 import com.jude.ferryman.internal.router.Url;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -18,7 +19,14 @@ import java.util.Map;
 public abstract class Porter {
 
     public static Map<String,String> readParams(Activity activity){
-        return  ((Url)activity.getIntent().getParcelableExtra(Router.REQUEST_DATA)).getParams();
+        Object urlObj = activity.getIntent().getParcelableExtra(Router.REQUEST_DATA);
+        if (urlObj != null){
+            return  ((Url) urlObj).getParams();
+        }else if (activity.getIntent().getData()!=null){
+            return Url.parse(activity.getIntent().getData().toString()).getParams();
+        }else {
+            return Collections.emptyMap();
+        }
     }
 
     public static void writeResult(Map<String,String> params, Activity activity){
@@ -41,7 +49,12 @@ public abstract class Porter {
     }
 
     public static <T> T toObject(Type type, String object){
-        return (T) FerrymanSetting.findConverter(type).decode(type,object);
+        Object objectValue = FerrymanSetting.findConverter(type).decode(type,object);
+        if (objectValue!=null){
+            return (T) objectValue;
+        }else {
+            return null;
+        }
     }
 
     public static String fromObject(Type type, Object object){

@@ -6,7 +6,6 @@ public class RouterMap {
     private Map routerTable;
 
     public RouterMap() {
-        throw new IllegalStateException("PlaceHolder class can't be use");
     }
 
     private void initTable() {
