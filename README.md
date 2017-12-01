@@ -77,7 +77,7 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 
 ```
-如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
+如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。  
 **注解参数支持 DeepLink**可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
