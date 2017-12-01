@@ -171,9 +171,9 @@ FerrymanSetting.addConverterFactory(Converter.Factory factory);
 提供注册拦截器，对需要跳转的url进行一些批处理。
 ```java
 // url 方式的跳转
-FerrymanSetting.addUrlInterceptors.addUrlInterceptors(RouterInterceptor interceptor);
+FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
 // api 方式的跳转
-FerrymanSetting.addAPIInterceptors.addUrlInterceptors(RouterInterceptor interceptor);
+FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
 ```
 
 ## Library中使用
