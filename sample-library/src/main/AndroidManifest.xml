@@ -5,6 +5,7 @@
 
         <activity android:name=".LibraryActivity"/>
         <activity android:name=".SecondActivity"/>
+        <activity android:name=".WebViewActivity"/>
         <activity android:name=".DeepLinkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

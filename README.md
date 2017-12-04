@@ -31,8 +31,8 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.1.3'
-    annotationProcessor 'com.jude:ferryman-compiler:1.1.3'
+    compile 'com.jude:ferryman-core:1.2.0'
+    annotationProcessor 'com.jude:ferryman-compiler:1.2.0'
 
 ## Usage
 
@@ -77,8 +77,11 @@ Ferryman.from(MainActivity.this).gotoNumberInputActivity("Lee","China");
 RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
 
 ```
-如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。  
-**注解参数支持 DeepLink**. 可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
+#### Notice
++ 如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。  
++ **注解参数支持 DeepLink**. 可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
++ 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
+
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
 使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
@@ -118,7 +121,9 @@ Ferryman.from(MainActivity.this)
 
         });
 ```
-如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
+#### Notice
++ 如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
++ 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
 ### 4. 页面数据注入抽取
 参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。  
@@ -181,7 +186,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.1.3'
+        classpath 'com.jude:ferryman-modular:1.2.0'
     }
 }
 

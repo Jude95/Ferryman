@@ -40,9 +40,14 @@ public class NameInputActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 myName = etName.getText().toString();
-                Ferryman.boxingData(NameInputActivity.this);
                 finish();
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        Ferryman.boxingData(NameInputActivity.this);
+        super.finish();
     }
 }

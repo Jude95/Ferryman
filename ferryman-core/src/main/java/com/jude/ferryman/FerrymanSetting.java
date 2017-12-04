@@ -56,7 +56,7 @@ public class FerrymanSetting {
                 return router;
             }
         }
-        throw new IllegalArgumentException("no Page find for this url: "+url);
+        throw new IllegalArgumentException("no Router find for this url: "+url);
     }
 
     public static Converter findConverter(Type type){

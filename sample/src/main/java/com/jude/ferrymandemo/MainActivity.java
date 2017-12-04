@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 return new Router() {
                     @Override
                     public Intent start(@NonNull Context context, @NonNull String url) {
-                        Log.i("Fuck","second:"+url);
+                        Log.i("Default","default handler for:"+url);
                         return null;
                     }
                 };

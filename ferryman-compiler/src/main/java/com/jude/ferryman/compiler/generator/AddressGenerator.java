@@ -11,7 +11,6 @@ import com.squareup.javapoet.TypeSpec;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.lang.model.element.Modifier;
 
@@ -55,7 +54,7 @@ public class AddressGenerator extends ClassGenerator{
                 .addStatement("return (Class<? extends $T>) routerMap.get(address)", activity)
                 .returns(Class.class)
                 .endControlFlow()
-                .addStatement("throw new $T(address)", NoSuchElementException.class)
+                .addStatement("return null")
                 .build();
 
         /**

@@ -3,10 +3,12 @@ package com.jude.ferryman.compiler.generator;
 import com.jude.ferryman.compiler.Constants;
 import com.jude.ferryman.compiler.model.ActivityInfo;
 import com.jude.ferryman.compiler.model.FieldInfo;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
@@ -97,7 +99,11 @@ public class BoatGenerator extends ClassGenerator {
 
             // 添加启动参数
             for (FieldInfo fieldInfo : activityInfo.getParams()) {
-                methodBuilder.addParameter(fieldInfo.getClazz(),fieldInfo.getKey());
+                ParameterSpec.Builder parameterSpecBuilder = ParameterSpec.builder(fieldInfo.getClazz(),fieldInfo.getKey());
+                for (AnnotationSpec annotationSpec : fieldInfo.getAnnotations()) {
+                    parameterSpecBuilder.addAnnotation(annotationSpec);
+                }
+                methodBuilder.addParameter(parameterSpecBuilder.build());
             }
 
             methodBuilder

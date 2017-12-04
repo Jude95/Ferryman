@@ -40,14 +40,19 @@ public class RouterDriver {
 
     private static Intent getIntent(Context context, String url) {
         Intent intent = FerrymanSetting.findRouter(url).start(context, url);
-        intent.putExtra(REQUEST_DATA, Url.parse(url));
-        if (!(context instanceof Activity)){
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        if (intent != null){
+            intent.putExtra(REQUEST_DATA, Url.parse(url));
+            if (!(context instanceof Activity)){
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            }
         }
         return intent;
     }
 
     private static void startIntent(Context context,Intent intent,OnActivityResultListener listener){
+        if (intent == null){
+            return;
+        }
         if (context instanceof FragmentActivity && listener != null){
             ActivityResultHooker.startHookFragment((Activity) context, intent, listener);
         }else {

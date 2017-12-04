@@ -16,14 +16,18 @@ import com.jude.ferryman.compiler.generator.SiphonGenerator;
 import com.jude.ferryman.compiler.model.ActivityInfo;
 import com.jude.ferryman.compiler.model.FieldInfo;
 import com.jude.ferryman.compiler.model.InjectClassInfo;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 import com.sun.source.util.Trees;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -32,6 +36,7 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -215,7 +220,8 @@ public class FerrymanProcessor extends AbstractProcessor {
         }
         VariableElement variableElement = (VariableElement) element;
         Params params = element.getAnnotation(Params.class);
-        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType()));
+
+        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType()), getParameterAnnotations(element));
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addParams(info);
         InjectClassInfo injectClassInfo = findInjectClassInfo(activityInfo,element);
@@ -233,7 +239,7 @@ public class FerrymanProcessor extends AbstractProcessor {
         }
         VariableElement variableElement = (VariableElement) element;
         Result result = element.getAnnotation(Result.class);
-        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),result.value(),convertClass(element.asType()));
+        FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),result.value(),convertClass(element.asType()), getParameterAnnotations(element));
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addResult(info);
         InjectClassInfo injectClassInfo = findInjectClassInfo(activityInfo,element);
@@ -302,4 +308,22 @@ public class FerrymanProcessor extends AbstractProcessor {
         return TypeName.get(typeMirror);
     }
 
+    private static List<AnnotationSpec> getParameterAnnotations(Element element){
+        List<AnnotationSpec> annotations = new ArrayList<>();
+        out:for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+            Target[] targets = annotationMirror.getAnnotationType().asElement().getAnnotationsByType(Target.class);
+            if (targets != null && targets.length > 0){
+                for (Target target : targets) {
+                    ElementType[] elementTypes = target.value();
+                    for (ElementType elementType : elementTypes) {
+                        if (elementType == ElementType.PARAMETER){
+                            annotations.add(AnnotationSpec.get(annotationMirror));
+                            continue out;
+                        }
+                    }
+                }
+            }
+        }
+        return annotations;
+    }
 }
