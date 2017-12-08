@@ -25,5 +25,8 @@ public class ActivityTwoData {
     public int oooo;
     @Result
     public float yee;
+    @Result
+    @Nullable
+    public List<HashMap<String,List<Integer>>> wtfresult;
 
 }

@@ -3,9 +3,9 @@ package com.jude.ferryman.module.weaver;
 import com.android.build.api.transform.QualifiedContent;
 import com.android.build.api.transform.Status;
 import com.jude.ferryman.module.entry.FerrymanInfo;
-import com.jude.ferryman.module.framework.*;
+import com.jude.ferryman.module.framework.ClassHandler;
 import com.jude.ferryman.module.framework.DirectoryWriter;
-import com.jude.ferryman.module.log.Log;
+import com.jude.ferryman.module.framework.TransformContext;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -39,8 +39,6 @@ public class MergeClassHandler implements ClassHandler {
 
     @Override
     public void onClassFetch(QualifiedContent content, Status status, String relativePath, byte[] bytes) throws IOException {
-        Log.i("onClassFetch "+relativePath);
-        System.out.println("onClassFetch "+relativePath);
         File relativeRoot = context.getRelativeFile(content);
         if (relativePath.endsWith(".class")&&relativePath.contains("com/jude/ferryman")) {
             ClassReader cr = new ClassReader(bytes);

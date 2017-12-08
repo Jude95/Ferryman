@@ -129,8 +129,11 @@ public class PorterGenerator extends ClassGenerator {
                 .addParameter(info.getName(), PARAMS_OBJECT)
                 .addParameter(ClassName.bestGuess(CLASS_ACTIVITY), PARAMS_ACTIVITY)
                 .addStatement("$T<String,String> results = new $T<>();",ClassName.bestGuess(CLASS_HASHMAP),ClassName.bestGuess(CLASS_HASHMAP));
+        int number = 0;
         for (FieldInfo fieldInfo : info.getResult()) {
-            methodBuilder.addStatement("results.put($S, fromObject($L.class,object.$L))",fieldInfo.getKey(),fieldInfo.getClazz(),fieldInfo.getName());
+            generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
+            methodBuilder.addStatement("results.put($S, fromObject(type$L$L$L,object.$L))",fieldInfo.getKey(),number,0,0,fieldInfo.getName());
+            number++;
         }
         methodBuilder.addStatement("writeResult(results,activity)");
         builder.addMethod(methodBuilder.build());

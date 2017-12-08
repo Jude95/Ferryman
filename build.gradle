@@ -8,8 +8,8 @@ buildscript {
         bintrayKey = properties.getProperty('bintrayKey')
 
         ferryman_group = 'com.jude'
-        ferryman_version = '1.2.0'
-        ferryman_version_compile = '1.1.3-alpha24'
+        ferryman_version = '1.2.2'
+        ferryman_version_compile = '1.2.2'
     }
     repositories {
         google()

@@ -15,11 +15,11 @@ import java.io.IOException;
 public class FerrymanModulePlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
-        try {
-            initLog(project);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            initLog(project);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         BaseExtension baseExtension = (BaseExtension) project.getExtensions().getByName("android");
         if (project.getPlugins().findPlugin("com.android.application") != null){
             Log.i("apply application with ModuleMergeTransform");

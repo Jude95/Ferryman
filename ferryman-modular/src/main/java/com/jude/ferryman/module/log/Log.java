@@ -22,13 +22,13 @@
 package com.jude.ferryman.module.log;
 
 
-import com.jude.ferryman.module.log.Impl.SystemLoggerImpl;
+import com.jude.ferryman.module.log.Impl.NoLogger;
 
 /**
  * Created by gengwanpeng on 16/7/6.
  */
 public class Log {
-    private static ILogger logger = new SystemLoggerImpl();
+    private static ILogger logger = new NoLogger();
     private static Level level = Level.INFO;
     public static final String DEFAULT_TAG = "Ferryman";
 
