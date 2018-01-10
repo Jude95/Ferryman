@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -102,6 +103,7 @@ public class FerrymanProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
         collectActivityInfos(env);
+        sortActivityInfos();
         try {
             new AddressGenerator(mActivityInfos).build().writeTo(filer);
             new BoatGenerator(mActivityInfos).build().writeTo(filer);
@@ -114,6 +116,31 @@ public class FerrymanProcessor extends AbstractProcessor {
         return true;
     }
 
+    public void sortActivityInfos(){
+        // sort the method in Boat
+        mActivityInfos.sort(new Comparator<ActivityInfo>() {
+            @Override
+            public int compare(ActivityInfo left, ActivityInfo right) {
+                return left.getName().packageName().compareTo(right.getName().packageName());
+            }
+        });
+
+        // sort params in Boat method
+        for (ActivityInfo mActivityInfo : mActivityInfos) {
+            mActivityInfo.getInjectClassInfos().sort(new Comparator<InjectClassInfo>() {
+                @Override
+                public int compare(InjectClassInfo left, InjectClassInfo right) {
+                    if (left.getName().simpleName().endsWith("Activity")){
+                        return 1;
+                    }
+                    if (right.getName().simpleName().endsWith("Activity")){
+                        return 1;
+                    }
+                    return left.getName().simpleName().compareTo(right.getName().simpleName());
+                }
+            });
+        }
+    }
 
     public void collectActivityInfos(RoundEnvironment env){
         for (Element element : env.getElementsAnnotatedWith(ActivityRelation.class)) {

@@ -36,7 +36,7 @@ public class ActivityResultHooker {
             mHookFragment = new HookFragment();
             manager.beginTransaction()
                     .add(mHookFragment, TAG)
-                    .commit();
+                    .commitAllowingStateLoss();
             manager.executePendingTransactions();
         }
 

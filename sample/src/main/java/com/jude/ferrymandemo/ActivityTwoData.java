@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by zhuchenxi on 2017/1/20.
  */
-@BindActivity(ActivityTwo.class)
+@BindActivity(ActivityTwoActivity.class)
 public class ActivityTwoData {
     @Params
     @Nullable

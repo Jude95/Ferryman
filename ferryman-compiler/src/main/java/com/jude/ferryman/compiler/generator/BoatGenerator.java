@@ -95,6 +95,7 @@ public class BoatGenerator extends ClassGenerator {
 
             MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(METHOD_API_PREFIX+activitySimpleName)
                         .addModifiers(Modifier.PUBLIC)
+                        .addJavadoc("springboard of {@link $T}\n",activityInfo.getName())
                         .returns(returnType);
 
             // 添加启动参数

@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
-
         btnAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
