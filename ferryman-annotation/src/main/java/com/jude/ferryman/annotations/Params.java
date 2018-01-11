@@ -14,4 +14,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Params {
     String value() default "";
+    String[] method() default "";
+    boolean ignore() default false;
 }

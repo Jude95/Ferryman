@@ -249,6 +249,8 @@ public class FerrymanProcessor extends AbstractProcessor {
         Params params = element.getAnnotation(Params.class);
 
         FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType()), getParameterAnnotations(element));
+        info.setMethod(params.method());
+        info.setIgnore(params.ignore());
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addParams(info);
         InjectClassInfo injectClassInfo = findInjectClassInfo(activityInfo,element);

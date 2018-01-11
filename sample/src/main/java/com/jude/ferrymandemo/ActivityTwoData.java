@@ -15,12 +15,12 @@ import java.util.List;
  */
 @BindActivity(ActivityTwoActivity.class)
 public class ActivityTwoData {
-    @Params
+    @Params(method = {"A","B"})
     @Nullable
     public List<HashMap<String,List<Integer>>> wtf;
-    @Params
+    @Params(method = {"B"})
     public String HUIHJioluHNLI;
-    @Params
+    @Params(ignore = true)
     @IdRes
     public int oooo;
     @Result

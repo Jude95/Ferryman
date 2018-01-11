@@ -12,6 +12,8 @@ import java.util.List;
 public class FieldInfo {
     private String name;
     private String key;
+    private String[] method;
+    private boolean ignore;
     private TypeName clazz;
     private List<AnnotationSpec> annotations;
 
@@ -46,6 +48,21 @@ public class FieldInfo {
         this.clazz = clazz;
     }
 
+    public String[] getMethod() {
+        return method;
+    }
+
+    public void setMethod(String[] method) {
+        this.method = method;
+    }
+
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    public void setIgnore(boolean ignore) {
+        this.ignore = ignore;
+    }
 
     public List<AnnotationSpec> getAnnotations() {
         return annotations;
