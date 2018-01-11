@@ -31,8 +31,8 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.2.4-alpha1'
-    annotationProcessor 'com.jude:ferryman-compiler:1.2.4-alpha1'
+    compile 'com.jude:ferryman-core:1.2.5-alpha1'
+    annotationProcessor 'com.jude:ferryman-compiler:1.2.5-alpha1'
 
 ## Usage
 
@@ -186,12 +186,28 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.2.4-alpha1'
+        classpath 'com.jude:ferryman-modular:1.2.5-alpha1'
     }
 }
 
 apply plugin: 'com.jude.ferryman-modular'
 
+```
+
+### 页面管理
+提供页面管理功能，单独一套 API .
+```java
+// 初始化，在 Application 中设置
+PageManager.init(Context ctx);
+
+// 取栈顶 Activity 
+PageManager.getTopActivity();
+
+// 关闭所有 Activity
+PageManager.clearAllStack();
+
+// 返回 Activity 栈
+PageManager.printPageStack();
 ```
 
 License
