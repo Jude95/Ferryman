@@ -24,7 +24,7 @@ public class LibraryActivity extends AppCompatActivity {
         findViewById(R.id.second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Ferryman.from(LibraryActivity.this).gotoSecondActivity("A",23);
+                Ferryman.from(LibraryActivity.this).gotoSecondActivity("A","B");
             }
         });
         findViewById(R.id.webview).setOnClickListener(new View.OnClickListener() {

@@ -21,7 +21,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
         setContentView(R.layout.second);
         ((TextView)findViewById(R.id.textview)).setText(url);
     }

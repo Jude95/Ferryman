@@ -34,7 +34,7 @@ public class NumberInputActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number_input);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
         btnOk = (Button) findViewById(R.id.submit);
         tvHint = (TextView) findViewById(R.id.hint);
         etNumber = (EditText) findViewById(R.id.number);
@@ -44,7 +44,7 @@ public class NumberInputActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 number = etNumber.getText().toString();
-                Ferryman.boxingData(NumberInputActivity.this);
+                Ferryman.save(NumberInputActivity.this);
                 finish();
             }
         });

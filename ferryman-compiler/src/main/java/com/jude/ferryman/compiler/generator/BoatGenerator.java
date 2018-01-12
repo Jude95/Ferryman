@@ -107,12 +107,12 @@ public class BoatGenerator extends ClassGenerator {
 
 
                 // 区分可空方法
-                Map<String, List<FieldInfo>> ignoreMethods = divideIgnoreMethod(fieldListEntry.getValue());
-                for (Map.Entry<String, List<FieldInfo>> paramsListEntry : ignoreMethods.entrySet()) {
+                Map<List<FieldInfo>,String> ignoreMethods = divideIgnoreMethod(fieldListEntry.getValue());
+                for (Map.Entry<List<FieldInfo>,String> paramsListEntry : ignoreMethods.entrySet()) {
 
                     String finalSuffix = suffix;
-                    if (!paramsListEntry.getKey().equals("0")) {
-                        finalSuffix += paramsListEntry.getKey();
+                    if (!paramsListEntry.getValue().isEmpty()) {
+                        finalSuffix += paramsListEntry.getValue();
                     }
 
                     // 最终区分了模板与可空之后的方法
@@ -124,8 +124,8 @@ public class BoatGenerator extends ClassGenerator {
                     methodBuilder
                             .addStatement("$T.Builder builder = new $T.Builder()", ClassName.bestGuess(CLASS_URL), ClassName.bestGuess(CLASS_URL))
                             .addStatement("builder.setAddress($S)", activityInfo.getUrl()[0]);
-                    addField(methodBuilder, paramsListEntry.getValue());
-                    addConverterCode(methodBuilder, paramsListEntry.getValue());
+                    addField(methodBuilder, paramsListEntry.getKey());
+                    addConverterCode(methodBuilder, paramsListEntry.getKey());
                     addReturnCode(methodBuilder, resultType, !activityInfo.getResult().isEmpty());
 
                     result.addMethod(methodBuilder.build());
@@ -174,7 +174,7 @@ public class BoatGenerator extends ClassGenerator {
         }
     }
 
-    private Map<String, List<FieldInfo>> divideIgnoreMethod(List<FieldInfo> fieldInfoList) {
+    private Map<List<FieldInfo>,String> divideIgnoreMethod(List<FieldInfo> fieldInfoList) {
         List<FieldInfo> baseInfoList = new ArrayList<>();
         List<FieldInfo> ignoreInfoList = new ArrayList<>();
         for (FieldInfo fieldInfo : fieldInfoList) {
@@ -184,20 +184,37 @@ public class BoatGenerator extends ClassGenerator {
                 baseInfoList.add(fieldInfo);
             }
         }
-        Map<String, List<FieldInfo>> result = new HashMap<>();
+        Map<List<FieldInfo>,String> result = new HashMap<>();
+        // 方法签名缓存，进行重复方法的判断
+        Map<String, Integer> signResults = new HashMap<>();
         int len = ignoreInfoList.size();
         int nbits = 1 << len;
         for (int i = 0; i < nbits; ++i) {
             int t;
             ArrayList<FieldInfo> curFields = new ArrayList<>(baseInfoList);
+            StringBuilder signBuilder = new StringBuilder();
             for (int j = 0; j < len; j++) {
                 t = 1 << j;
                 if ((t & i) != 0) {
                     curFields.add(ignoreInfoList.get(j));
+                    signBuilder.append(ignoreInfoList.get(j).getClazz().toString());
                 }
             }
-            result.put(i + "", curFields);
+            String sign = signBuilder.toString();
+            System.out.println(sign);
+            if (signResults.containsKey(sign)){
+                int index = signResults.get(sign)+1;
+                signResults.put(sign,index);
+                result.put(curFields,index+"");
+                System.out.println("yes and put "+index);
+            }else {
+                System.out.println(sign);
+                signResults.put(sign,0);
+                result.put(curFields, "");
+                System.out.println("no and put 0");
+            }
         }
+        System.out.println(signResults);
         return result;
     }
 

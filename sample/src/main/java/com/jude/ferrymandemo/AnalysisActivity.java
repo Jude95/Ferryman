@@ -24,7 +24,7 @@ public class AnalysisActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
         textView = (TextView) findViewById(R.id.textView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         mSubmitPresenter = new AnalysisPresenter(this);
