@@ -98,36 +98,39 @@ public class BoatGenerator extends ClassGenerator {
             }
 
             // 区分模板方法
-            Map<String, List<FieldInfo>> methods = divideMethod(activityInfo.getParams());
-            for (Map.Entry<String, List<FieldInfo>> fieldListEntry : methods.entrySet()) {
+            Map<String, List<FieldInfo>> groups = divideGroup(activityInfo.getParams());
+            for (Map.Entry<String, List<FieldInfo>> fieldListEntry : groups.entrySet()) {
                 String suffix = fieldListEntry.getKey();
-                if (!suffix.isEmpty()){
+                if (!suffix.isEmpty()) {
                     suffix = suffix.replaceFirst(suffix.charAt(0) + "", Character.toUpperCase(suffix.charAt(0)) + "");
                 }
-                MethodSpec method = MethodSpec.methodBuilder(METHOD_API_PREFIX + activitySimpleName + suffix)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addJavadoc("springboard of {@link $T}\n", activityInfo.getName())
-                        .returns(returnType)
-                        .build();
+
 
                 // 区分可空方法
-                List<List<FieldInfo>> ignoreMethods = divideIgnoreMethod(fieldListEntry.getValue());
-                for (List<FieldInfo> ignoreMethod : ignoreMethods) {
+                Map<String, List<FieldInfo>> ignoreMethods = divideIgnoreMethod(fieldListEntry.getValue());
+                for (Map.Entry<String, List<FieldInfo>> paramsListEntry : ignoreMethods.entrySet()) {
+
+                    String finalSuffix = suffix;
+                    if (!paramsListEntry.getKey().equals("0")) {
+                        finalSuffix += paramsListEntry.getKey();
+                    }
+
                     // 最终区分了模板与可空之后的方法
-                    MethodSpec.Builder methodBuilder = method.toBuilder();
+                    MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(METHOD_API_PREFIX + activitySimpleName + finalSuffix)
+                            .addModifiers(Modifier.PUBLIC)
+                            .addJavadoc("springboard of {@link $T}\n", activityInfo.getName())
+                            .returns(returnType);
 
                     methodBuilder
                             .addStatement("$T.Builder builder = new $T.Builder()", ClassName.bestGuess(CLASS_URL), ClassName.bestGuess(CLASS_URL))
                             .addStatement("builder.setAddress($S)", activityInfo.getUrl()[0]);
-                    addField(methodBuilder, ignoreMethod);
-                    addConverterCode(methodBuilder, ignoreMethod);
+                    addField(methodBuilder, paramsListEntry.getValue());
+                    addConverterCode(methodBuilder, paramsListEntry.getValue());
                     addReturnCode(methodBuilder, resultType, !activityInfo.getResult().isEmpty());
 
                     result.addMethod(methodBuilder.build());
                 }
-
             }
-
         }
     }
 
@@ -135,43 +138,43 @@ public class BoatGenerator extends ClassGenerator {
      * 在 Map 中保存所有分类的参数列表，同时维持一个主列表
      * 每读入一个普通参数，给每一个列表+1。
      * 每读到一个分组参数，给分组对应列表+1.
-     *      如果分组不存在，从主列表里fork一个列表作为此分组列表
+     * 如果分组不存在，从主列表里fork一个列表作为此分组列表
      *
      * @param fieldInfoList
      * @return
      */
-    private Map<String, List<FieldInfo>> divideMethod(List<FieldInfo> fieldInfoList) {
+    private Map<String, List<FieldInfo>> divideGroup(List<FieldInfo> fieldInfoList) {
         // key是参数列表，value是方法标识
         HashMap<String, List<FieldInfo>> fieldMap = new HashMap<>();
         List<FieldInfo> base = new ArrayList<>();
 
         for (FieldInfo fieldInfo : fieldInfoList) {
-            String[] methods = fieldInfo.getMethod();
+            String[] groups = fieldInfo.getGroup();
 
-            if (methods == null || methods.length == 0 || (methods.length == 1 && methods[0].isEmpty())) {
+            if (groups == null || groups.length == 0 || (groups.length == 1 && groups[0].isEmpty())) {
                 base.add(fieldInfo);
                 for (List<FieldInfo> fieldInfos : fieldMap.values()) {
                     fieldInfos.add(fieldInfo);
                 }
             } else {
-                for (String method : methods) {
-                    List<FieldInfo> list = fieldMap.get(method);
+                for (String group : groups) {
+                    List<FieldInfo> list = fieldMap.get(group);
                     if (list == null) {
                         list = new ArrayList<>(base);
-                        fieldMap.put(method, list);
+                        fieldMap.put(group, list);
                     }
                     list.add(fieldInfo);
                 }
             }
         }
-        if (fieldMap.isEmpty()){
-            return Collections.singletonMap("",base);
-        }else {
+        if (fieldMap.isEmpty()) {
+            return Collections.singletonMap("", base);
+        } else {
             return fieldMap;
         }
     }
 
-    private List<List<FieldInfo>> divideIgnoreMethod(List<FieldInfo> fieldInfoList) {
+    private Map<String, List<FieldInfo>> divideIgnoreMethod(List<FieldInfo> fieldInfoList) {
         List<FieldInfo> baseInfoList = new ArrayList<>();
         List<FieldInfo> ignoreInfoList = new ArrayList<>();
         for (FieldInfo fieldInfo : fieldInfoList) {
@@ -181,7 +184,7 @@ public class BoatGenerator extends ClassGenerator {
                 baseInfoList.add(fieldInfo);
             }
         }
-        List<List<FieldInfo>> result = new ArrayList<>();
+        Map<String, List<FieldInfo>> result = new HashMap<>();
         int len = ignoreInfoList.size();
         int nbits = 1 << len;
         for (int i = 0; i < nbits; ++i) {
@@ -193,7 +196,7 @@ public class BoatGenerator extends ClassGenerator {
                     curFields.add(ignoreInfoList.get(j));
                 }
             }
-            result.add(curFields);
+            result.put(i + "", curFields);
         }
         return result;
     }

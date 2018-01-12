@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Params {
     String value() default "";
-    String[] method() default "";
+    String[] group() default "";
     boolean ignore() default false;
 }

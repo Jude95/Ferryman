@@ -12,7 +12,7 @@ import java.util.List;
 public class FieldInfo {
     private String name;
     private String key;
-    private String[] method;
+    private String[] group;
     private boolean ignore;
     private TypeName clazz;
     private List<AnnotationSpec> annotations;
@@ -48,12 +48,12 @@ public class FieldInfo {
         this.clazz = clazz;
     }
 
-    public String[] getMethod() {
-        return method;
+    public String[] getGroup() {
+        return group;
     }
 
-    public void setMethod(String[] method) {
-        this.method = method;
+    public void setGroup(String[] group) {
+        this.group = group;
     }
 
     public boolean isIgnore() {

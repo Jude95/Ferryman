@@ -117,7 +117,7 @@ public class FerrymanProcessor extends AbstractProcessor {
     }
 
     public void sortActivityInfos(){
-        // sort the method in Boat
+        // sort the group in Boat
         mActivityInfos.sort(new Comparator<ActivityInfo>() {
             @Override
             public int compare(ActivityInfo left, ActivityInfo right) {
@@ -125,7 +125,7 @@ public class FerrymanProcessor extends AbstractProcessor {
             }
         });
 
-        // sort params in Boat method
+        // sort params in Boat group
         for (ActivityInfo mActivityInfo : mActivityInfos) {
             mActivityInfo.getInjectClassInfos().sort(new Comparator<InjectClassInfo>() {
                 @Override
@@ -249,7 +249,7 @@ public class FerrymanProcessor extends AbstractProcessor {
         Params params = element.getAnnotation(Params.class);
 
         FieldInfo info = new FieldInfo(variableElement.getSimpleName().toString(),params.value(),convertClass(element.asType()), getParameterAnnotations(element));
-        info.setMethod(params.method());
+        info.setGroup(params.group());
         info.setIgnore(params.ignore());
         ActivityInfo activityInfo = findActivityInfo(element);
         activityInfo.addParams(info);
