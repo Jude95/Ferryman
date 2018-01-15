@@ -135,11 +135,14 @@ public class BoatGenerator extends ClassGenerator {
     }
 
     /**
+     * 分组操作
+     *
      * 在 Map 中保存所有分类的参数列表，同时维持一个主列表
      * 每读入一个普通参数，给每一个列表+1。
      * 每读到一个分组参数，给分组对应列表+1.
      * 如果分组不存在，从主列表里fork一个列表作为此分组列表
      *
+     * 最终返回 < 分组标识 - 参数列表 >
      * @param fieldInfoList
      * @return
      */
@@ -174,6 +177,29 @@ public class BoatGenerator extends ClassGenerator {
         }
     }
 
+    /**
+     *
+     * 对忽略参数进行方法生成，主要涉及一个组合算法，计算出忽略参数的所有组合。
+     * 例如 参数 A,B,C
+     * 输出这样一个二维数组
+     *   A
+     *   B
+     *   C
+     *   AB
+     *   AC
+     *   BC
+     *   ABC
+     *
+     * 还涉及到一个方法签名的问题
+     * 比如上例中，A，B 均为 int 型，则 AC, BC的方法签名会相同，造成编译失败。
+     * 此时需要对BC追加一个标识，最终生成的的方法应该是
+     *      void gotoXXX(A,C)
+     *      void gotoXXX1(B,C)
+     *
+     * 最终返回 < 参数列表 - 方法标识("" 表示无需标识; "1/2/3"为标识) >
+     * @param fieldInfoList
+     * @return
+     */
     private Map<List<FieldInfo>,String> divideIgnoreMethod(List<FieldInfo> fieldInfoList) {
         List<FieldInfo> baseInfoList = new ArrayList<>();
         List<FieldInfo> ignoreInfoList = new ArrayList<>();
