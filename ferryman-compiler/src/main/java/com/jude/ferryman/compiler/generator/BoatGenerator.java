@@ -227,20 +227,15 @@ public class BoatGenerator extends ClassGenerator {
                 }
             }
             String sign = signBuilder.toString();
-            System.out.println(sign);
             if (signResults.containsKey(sign)){
                 int index = signResults.get(sign)+1;
                 signResults.put(sign,index);
                 result.put(curFields,index+"");
-                System.out.println("yes and put "+index);
             }else {
-                System.out.println(sign);
                 signResults.put(sign,0);
                 result.put(curFields, "");
-                System.out.println("no and put 0");
             }
         }
-        System.out.println(signResults);
         return result;
     }
 

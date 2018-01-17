@@ -134,7 +134,7 @@ public class FerrymanProcessor extends AbstractProcessor {
                         return 1;
                     }
                     if (right.getName().simpleName().endsWith("Activity")){
-                        return 1;
+                        return 0;
                     }
                     return left.getName().simpleName().compareTo(right.getName().simpleName());
                 }

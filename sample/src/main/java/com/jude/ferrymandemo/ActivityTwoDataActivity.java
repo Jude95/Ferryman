@@ -10,7 +10,7 @@ import com.jude.ferryman.annotations.Params;
  */
 
 @Page({"activity://two", "activity://two2"})
-public class ActivityTwoActivity extends Activity{
+public class ActivityTwoDataActivity extends Activity{
     @Params
     boolean booleanInActvity;
 

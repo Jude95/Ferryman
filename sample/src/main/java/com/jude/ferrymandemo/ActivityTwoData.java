@@ -13,12 +13,13 @@ import java.util.List;
 /**
  * Created by zhuchenxi on 2017/1/20.
  */
-@BindActivity(ActivityTwoActivity.class)
+@BindActivity(ActivityTwoDataActivity.class)
 public class ActivityTwoData {
 
     @Params
     @Nullable
     public List<HashMap<String,List<Integer>>> wtf;
+
 
     @Params
     public String HUIHJioluHNLI;
