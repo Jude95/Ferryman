@@ -82,6 +82,33 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 + **注解参数支持 DeepLink**. 可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
 + 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
+##### 2.1 页面参数进阶规则
+```java
+    @Params
+    String name;  // 将以 name 为参数名创建 API
+    
+    // 指定参数名
+    @Params("key")
+    String name;  // 将以 key 为参数名创建 API
+    
+    // 可忽略
+    @Params(ignore = true)
+    String name;  // 将会生成2个API, 一个包含name, 一个不包含
+    
+    // 参数分组
+    // 将生成2个API, 一个包含 name, count, 一个包含 age, color, count. 
+    // 拥有同一个分组标识的参数，会被分在同一组，每一组参数会创建一个API
+    @Params(group = "A")
+    String name; 
+    @Params(group = "B")
+    String age;
+    @Params(group = "B")
+    String color;
+    @Params(group = {"A","B"})
+    int count;
+    
+```
+
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
 使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
