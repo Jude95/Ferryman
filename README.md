@@ -121,12 +121,12 @@ public class NameInputActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
     }
 
     public void submit(){
         name = etName.getText().toString();
-        Ferryman.boxingData(this);
+        Ferryman.save(this);
         finish();
     }
 }
@@ -172,9 +172,9 @@ public class ShopPresenter {
 然后数据的拆箱装箱。  
 ```java
 // 拆箱注入数据
-Ferryman.unboxingDataFrom(activity).to(this);
+Ferryman.injectFrom(activity).to(this);
 // 装箱保存数据
-Ferryman.boxingDataIn(this).to(mActivity);
+Ferryman.saveFrom(this).to(activity);
 ```
 ### 5. 自定义路由
 允许自己处理未被绑定 Activity 的 url。返回 null 则表示不能处理这个 url。  
