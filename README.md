@@ -55,7 +55,7 @@ RouterDriver.startActivity(this,"activity://two");
 
 ### 2. 页面参数
 使用 `@Params` 注解标记参数。  
-在 Activity 中可以直接使用 `Ferryman.unboxingData(this);` 对参数数据拆箱并注入 Activity。    
+在 Activity 中可以直接使用 `Ferryman.inject(this);` 对参数数据拆箱并注入 Activity。    
 ```java
 @Page("activity://phoneNumber")
 public class NumberInputActivity extends AppCompatActivity {
@@ -111,7 +111,7 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
-使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
+使用 `Ferryman.save(this);` 将参数装箱并保存进 Activity。  
 ```java
 @Page
 public class NameInputActivity extends AppCompatActivity {
