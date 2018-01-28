@@ -31,8 +31,8 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.3.0-alpha3'
-    annotationProcessor 'com.jude:ferryman-compiler:1.3.0-alpha3'
+    compile 'com.jude:ferryman-core:1.3.0'
+    annotationProcessor 'com.jude:ferryman-compiler:1.3.0'
 
 ## Usage
 
@@ -204,7 +204,7 @@ FerrymanSetting.addConverterFactory(Converter.Factory factory);
 // url 方式的跳转
 FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
 // api 方式的跳转
-FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
+FerrymanSetting.addAPIInterceptors(RouterInterceptor interceptor);
 ```
 
 ## Library中使用
@@ -213,7 +213,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.3.0-alpha3'
+        classpath 'com.jude:ferryman-modular:1.3.0'
     }
 }
 
@@ -229,6 +229,17 @@ PageManager.init(Context ctx);
 
 // 取栈顶 Activity 
 PageManager.getTopActivity();
+// 取最上层指定类的 Activity 
+PageManager.getTopActivity(Class<? extends Activity> activityClass)
+PageManager.getTopActivity(String activityName)
+
+// 取最上层指定类的 Activity 深度
+PageManager.getDeep(Class<? extends Activity> activityClass)
+PageManager.getDeep(String activityName)
+
+// 关闭栈顶 Activity 直到展示指定类的 Activity
+PageManager.closeToLastActivity(Class<? extends Activity> activityClass)
+PageManager.closeToLastActivity(String activityName)
 
 // 关闭所有 Activity
 PageManager.clearAllStack();
