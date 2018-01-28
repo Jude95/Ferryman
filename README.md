@@ -3,7 +3,7 @@
 主要功能：
 
 1. Android 端页面路由，与 web 页面路由统一，非常便捷的由 web 跳转 activity 页面并携带参数
-2. 使用使用自动生成的函数进行 Activity 跳转代码，将页面所需数据作为了函数参数。
+2. 使用自动生成的函数进行 Activity 跳转代码，将页面所需数据作为了函数参数。
 3. Activity 返回监听功能，不再需要重写 `onActivityResult` 方法，还能自动装箱返回数据并返回。
 
 支持Kotlin, 支持在 Library 中使用以及模块化场景。  
