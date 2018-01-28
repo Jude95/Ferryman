@@ -161,19 +161,24 @@ Ferryman.from(MainActivity.this)
 + 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
 ### 4. 页面数据注入抽取
-参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。  
+参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。建立关联有2种方式：  
 1. 通过 `@BindActivity` 注解直接关联。
 ```java
 @BindActivity(ShopActivity.class)
 public class ShopPresenter {
     @Params
-    public String wtf;
-    @Params
-    public String HUIHJioluHNLI;
-    @Params
-    public int oooo;
-    @Result
-    public float yee;
+    public String id;
+}
+```
+2。 通过`@ActivityRelation` 使用正则匹配对类名进行匹配来批量关联。  
+接口与方法名无所谓，只要加上了 `@ActivityRelation` 即可。  
+对所有定义类与Activity的类名进行正则匹配，如果 `activityNameRegular` 匹配出的字符串与 `objectNameRegular` 匹配出的字符串相等，即为关联。
+```java
+public interface OneActivityRelations {
+
+    // 示例：将 XxxxActivity 与 XxxxPresenter 关联起来。
+    @ActivityRelation(activityNameRegular = "\\b\\w+(?=Activity)", objectNameRegular = "\\b\\w+(?=Presenter)")
+    void presenter();
 
 }
 ```
