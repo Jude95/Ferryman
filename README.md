@@ -6,7 +6,7 @@
 2. 使用使用自动生成的函数进行 Activity 跳转代码，将页面所需数据作为了函数参数。
 3. Activity 返回监听功能，不再需要重写 `onActivityResult` 方法，还能自动装箱返回数据并返回。
 
-支持Kotlin, 支持在 Library 中使用。  
+支持Kotlin, 支持在 Library 中使用以及模块化场景。  
 全库没有一个反射，纯依靠 APT 实现。  
 使用简洁直观的代码处理页面跳转：
 ```java
@@ -28,6 +28,14 @@ Ferryman.from(MainActivity.this)
 以及使用URL跳转
 ```java
 RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China");
+```
+以及兼容来自 Web 与其他应用的 Deeplink ( manifest里信息需自行填写 )
+```java
+Intent intent = new Intent();
+intent.setAction("android.intent.action.VIEW");
+Uri url = Uri.parse("activity://phoneNumber?name=Lee&country=China");
+intent.setData(url);
+startActivity(intent);
 ```
 ## Dependency
 
@@ -61,7 +69,7 @@ RouterDriver.startActivity(this,"activity://two");
 public class NumberInputActivity extends AppCompatActivity {
 
     @Params String name;
-    @Params("country") String mCountry;
+    @Params String mCountry;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -229,6 +237,7 @@ PageManager.init(Context ctx);
 
 // 取栈顶 Activity 
 PageManager.getTopActivity();
+
 // 取最上层指定类的 Activity 
 PageManager.getTopActivity(Class<? extends Activity> activityClass)
 PageManager.getTopActivity(String activityName)
