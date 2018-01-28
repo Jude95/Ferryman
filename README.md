@@ -66,7 +66,7 @@ public class NumberInputActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
      }
 }
 
