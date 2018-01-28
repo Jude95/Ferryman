@@ -161,7 +161,7 @@ Ferryman.from(MainActivity.this)
 + 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
 ### 4. 页面数据注入抽取
-参数及返回数据可以定义在非 Activity 类里，只要**与 Activity 建立关联**。建立关联有2种方式：  
+参数及返回数据可以定义在非 Activity 类里，比如定义在 Presenter 中，只要此类**与 Activity 建立关联**。建立关联有2种方式：  
 1. 通过 `@BindActivity` 注解直接关联。
 ```java
 @BindActivity(ShopActivity.class)
