@@ -18,7 +18,7 @@ public class AnalysisPresenter {
 
     public AnalysisPresenter(AnalysisActivity activity) {
         mActivity = activity;
-        Ferryman.unboxingDataFrom(activity).to(this);
+        Ferryman.injectFrom(activity).to(this);
     }
 
     public void startAnalysis(){
@@ -32,7 +32,7 @@ public class AnalysisPresenter {
     }
 
     public void finish(){
-        Ferryman.boxingDataIn(this).to(mActivity);
+        Ferryman.saveFrom(this).to(mActivity);
         mActivity.finish();
     }
 }

@@ -3,8 +3,8 @@ package com.jude.ferrymandemo.sample_library;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.jude.ferryman.Ferryman;
 import com.jude.ferryman.annotations.Page;
@@ -17,29 +17,29 @@ import com.jude.ferryman.record.PageManager;
  */
 @Page("library://second")
 public class SecondActivity extends AppCompatActivity {
-    @Params
+
+    @Params     // 页面参数
     String from;
-    @Params
-    int to;
-    @Result
+    @Params     // 页面参数
+    String to;
+    @Result     // 页面返回值
     int score;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
+        Log.i("FerrymanTest",PageManager.printPageStack());
+        Log.i("FerrymanTest",PageManager.getTopActivity().getClass().getName());
+        Log.i("FerrymanTest",PageManager.getTopActivity(LibraryActivity.class).getClass().getName());
+        Log.i("FerrymanTest",PageManager.getDeep(LibraryActivity.class)+"");
+        Log.i("FerrymanTest",PageManager.getDeep("com.jude.ferrymandemo.MainActivity")+"");
         findViewById(R.id.btn_clear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PageManager.clearAllStack();
+                PageManager.closeToLastActivity("com.jude.ferrymandemo.MainActivity");
             }
         });
-        ((TextView) findViewById(R.id.textview)).setText("url: " + getIntent().getData() +
-                "\n\nfrom: " + from
-                + "\n\nto: " + to
-                + "\n\nscore: " + score
-                + "\n\nTop" + PageManager.getTopActivity().getClass().getCanonicalName()
-                + "\n\nStack" + PageManager.printPageStack());
     }
 }

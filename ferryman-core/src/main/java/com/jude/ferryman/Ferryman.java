@@ -15,19 +15,19 @@ public class Ferryman {
         return new Boat(ctx);
     }
 
-    public static void unboxingData(Activity activity){
+    public static void inject(Activity activity){
         new Injector(activity).to(activity);
     }
 
-    public static void boxingData(Activity activity){
+    public static void save(Activity activity){
         new Siphon(activity).to(activity);
     }
 
-    public static Injector unboxingDataFrom(Context ctx){
+    public static Injector injectFrom(Context ctx){
         return new Injector(ctx);
     }
 
-    public static Siphon boxingDataIn(Object object){
+    public static Siphon saveFrom(Object object){
         return new Siphon(object);
     }
 

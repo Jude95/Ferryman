@@ -13,18 +13,28 @@ import java.util.List;
 /**
  * Created by zhuchenxi on 2017/1/20.
  */
-@BindActivity(ActivityTwoActivity.class)
+@BindActivity(ActivityTwoDataActivity.class)
 public class ActivityTwoData {
+
     @Params
     @Nullable
     public List<HashMap<String,List<Integer>>> wtf;
+
+
     @Params
     public String HUIHJioluHNLI;
-    @Params
+
+    @Params(ignore = true)
     @IdRes
     public int oooo;
+
+    @Params(ignore = true)
+    @IdRes
+    public int xxxx;
+
     @Result
     public float yee;
+
     @Result
     @Nullable
     public List<HashMap<String,List<Integer>>> wtfresult;

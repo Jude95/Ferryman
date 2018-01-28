@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.jude.ferrymandemo.ActivityTwoActivity" />
+        <activity android:name="com.jude.ferrymandemo.ActivityTwoDataActivity" />
         <activity
             android:name="com.jude.ferrymandemo.input.NameInputActivity"
             android:label="NameInput" />

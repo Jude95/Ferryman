@@ -32,7 +32,7 @@ public class NameInputActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name_input);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
         btnOk = (Button) findViewById(R.id.submit);
         etName = (EditText) findViewById(R.id.name);
         etName.setText(myName);
@@ -47,7 +47,7 @@ public class NameInputActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        Ferryman.boxingData(NameInputActivity.this);
+        Ferryman.save(NameInputActivity.this);
         super.finish();
     }
 }

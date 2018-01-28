@@ -25,6 +25,7 @@ public class PageManager {
      */
     public static void init(Context context){
         if (!INIT){
+            INIT = true;
             Application application = (Application) context.getApplicationContext();
             application.registerActivityLifecycleCallbacks(new ApplicationStateListener());
         }
@@ -44,13 +45,80 @@ public class PageManager {
         }
     }
 
+    /**
+     * 获取顶部Activity
+     * @return
+     */
     @Nullable
     public static Activity getTopActivity(){
         ActivityRecorder activityRecorder = null;
-        while ((activityRecorder = mActivityStack.peek()).getInstance() == null){
+        if (!mActivityStack.isEmpty()){
+            activityRecorder = mActivityStack.peek();
+        }
+        return activityRecorder == null ? null : activityRecorder.getInstance();
+    }
+
+    /**
+     * 取最近的指定class 的Activity
+     * @param activityClass
+     * @return
+     */
+    @Nullable
+    public static Activity getTopActivity(Class<? extends Activity> activityClass){
+        return getTopActivity(activityClass.getName());
+    }
+
+    @Nullable
+    public static Activity getTopActivity(String activityName) {
+        for (int i = mActivityStack.size() - 1; i >= 0; i--) {
+            ActivityRecorder recorder = mActivityStack.get(i);
+            if (recorder.getName().equals(activityName)){
+                return recorder.getInstance();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 取指定 class 的 Activity 深度.
+     * 不存在则返回 -1
+     * @param activityClass
+     * @return
+     */
+    public static int getDeep(Class<? extends Activity> activityClass){
+        return getDeep(activityClass.getName());
+    }
+
+    public static int getDeep(String activityName){
+        for (int i = mActivityStack.size() - 1; i >= 0; i--) {
+            ActivityRecorder recorder = mActivityStack.get(i);
+            if (recorder.getName().equals(activityName)){
+                return mActivityStack.size() - 1 - i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 关闭所有的Activity 直到指定 class 的Activity
+     * @param activityClass
+     * @return
+     */
+    @Nullable
+    public static Activity closeToLastActivity(Class<? extends Activity> activityClass){
+        return closeToLastActivity(activityClass.getName());
+    }
+
+    @Nullable
+    public static Activity closeToLastActivity(String activityName){
+        ActivityRecorder activityRecorder = null;
+        while (!mActivityStack.empty() && !(activityRecorder = mActivityStack.peek()).getName().equals(activityName)){
+            if (activityRecorder.getInstance()!=null){
+                activityRecorder.getInstance().finish();
+            }
             mActivityStack.pop();
         }
-        return activityRecorder.getInstance();
+        return activityRecorder == null ? null : activityRecorder.getInstance();
     }
 
     /**

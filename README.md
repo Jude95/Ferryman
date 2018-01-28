@@ -31,8 +31,8 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.2.5-alpha1'
-    annotationProcessor 'com.jude:ferryman-compiler:1.2.5-alpha1'
+    compile 'com.jude:ferryman-core:1.3.0'
+    annotationProcessor 'com.jude:ferryman-compiler:1.3.0'
 
 ## Usage
 
@@ -82,6 +82,33 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
 + **注解参数支持 DeepLink**. 可以直接自己构造 DeepLink url进行跳转。api,router,deeplink 三合一
 + 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
+##### 2.1 页面参数进阶规则
+```java
+    @Params
+    String name;  // 将以 name 为参数名创建 API
+    
+    // 指定参数名
+    @Params("key")
+    String name;  // 将以 key 为参数名创建 API
+    
+    // 可忽略
+    @Params(ignore = true)
+    String name;  // 将会生成2个API, 一个包含name, 一个不包含
+    
+    // 参数分组
+    // 将生成2个API, 一个包含 name, count, 一个包含 age, color, count. 
+    // 拥有同一个分组标识的参数，会被分在同一组，每一组参数会创建一个API
+    @Params(group = "A")
+    String name; 
+    @Params(group = "B")
+    String age;
+    @Params(group = "B")
+    String color;
+    @Params(group = {"A","B"})
+    int count;
+    
+```
+
 ### 3. 页面返回数据
 使用 `@Result` 注解标记返回数据。  
 使用 `Ferryman.boxingData(this);` 将参数装箱并塞入 Activity。  
@@ -94,12 +121,12 @@ public class NameInputActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
     }
 
     public void submit(){
         name = etName.getText().toString();
-        Ferryman.boxingData(this);
+        Ferryman.save(this);
         finish();
     }
 }
@@ -145,9 +172,9 @@ public class ShopPresenter {
 然后数据的拆箱装箱。  
 ```java
 // 拆箱注入数据
-Ferryman.unboxingDataFrom(activity).to(this);
+Ferryman.injectFrom(activity).to(this);
 // 装箱保存数据
-Ferryman.boxingDataIn(this).to(mActivity);
+Ferryman.saveFrom(this).to(activity);
 ```
 ### 5. 自定义路由
 允许自己处理未被绑定 Activity 的 url。返回 null 则表示不能处理这个 url。  
@@ -177,7 +204,7 @@ FerrymanSetting.addConverterFactory(Converter.Factory factory);
 // url 方式的跳转
 FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
 // api 方式的跳转
-FerrymanSetting.addUrlInterceptors(RouterInterceptor interceptor);
+FerrymanSetting.addAPIInterceptors(RouterInterceptor interceptor);
 ```
 
 ## Library中使用
@@ -186,7 +213,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.2.5-alpha1'
+        classpath 'com.jude:ferryman-modular:1.3.0'
     }
 }
 
@@ -202,6 +229,17 @@ PageManager.init(Context ctx);
 
 // 取栈顶 Activity 
 PageManager.getTopActivity();
+// 取最上层指定类的 Activity 
+PageManager.getTopActivity(Class<? extends Activity> activityClass)
+PageManager.getTopActivity(String activityName)
+
+// 取最上层指定类的 Activity 深度
+PageManager.getDeep(Class<? extends Activity> activityClass)
+PageManager.getDeep(String activityName)
+
+// 关闭栈顶 Activity 直到展示指定类的 Activity
+PageManager.closeToLastActivity(Class<? extends Activity> activityClass)
+PageManager.closeToLastActivity(String activityName)
 
 // 关闭所有 Activity
 PageManager.clearAllStack();

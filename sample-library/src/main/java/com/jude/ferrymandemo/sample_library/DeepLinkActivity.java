@@ -21,14 +21,14 @@ public class DeepLinkActivity extends AppCompatActivity{
     @Params
     int time;
 
-    @Params
+    @Params(ignore = true)
     Animal animal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deeplink);
-        Ferryman.unboxingData(this);
+        Ferryman.inject(this);
         ((TextView)findViewById(R.id.textview)).setText("url: "+getIntent().getData()+"\n\nname: "+name+"\n\ntime: "+time+"\n\nanimal "+animal);
     }
 }
