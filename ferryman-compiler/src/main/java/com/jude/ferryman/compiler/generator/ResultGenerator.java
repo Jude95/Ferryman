@@ -14,8 +14,8 @@ import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
-import static com.jude.ferryman.compiler.Constants.CLASS_PORTER;
-import static com.jude.ferryman.compiler.Constants.CLASS_RESULT;
+import static com.jude.ferryman.compiler.Constants.CLASS_INJECT_PORTER;
+import static com.jude.ferryman.compiler.Constants.CLASS_INJECT_RESULT;
 import static com.jude.ferryman.compiler.Constants.CLASS_RESULT_SUFFIX;
 import static com.jude.ferryman.compiler.Constants.CLASS_URL;
 
@@ -42,7 +42,7 @@ public class ResultGenerator extends ClassGenerator {
         TypeSpec.Builder result =
                 TypeSpec.classBuilder(getClassName())
                         .addModifiers(Modifier.PUBLIC)
-                        .superclass(ClassName.bestGuess(CLASS_RESULT));
+                        .superclass(ClassName.bestGuess(CLASS_INJECT_RESULT));
         addResultField(result);
         addReadMethod(result);
         addGetterMethod(result);
@@ -65,19 +65,24 @@ public class ResultGenerator extends ClassGenerator {
     private void addReadMethod(TypeSpec.Builder result){
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(METHOD_READ)
                 .addModifiers(Modifier.PUBLIC)
-                .returns(TypeName.VOID)
+                .returns(TypeName.BOOLEAN)
                 .addParameter(String.class, PARAMETER_DATA)
                 .addStatement("$T<String,String> params = $T.parse($L).getParams()",Map.class,ClassName.bestGuess(CLASS_URL),PARAMETER_DATA);
+        methodBuilder.beginControlFlow("if (params.isEmpty())")
+                .addStatement("return false")
+                .nextControlFlow("else");
         int number = 0;
         for (FieldInfo fieldInfo : info.getResult()) {
             generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
             methodBuilder.addStatement("this.$L = $T.toObject(type$L$L$L,params.get($S));",
                     fieldInfo.getKey(),
-                    ClassName.bestGuess(CLASS_PORTER),
+                    ClassName.bestGuess(CLASS_INJECT_PORTER),
                     number,0,0,
                     fieldInfo.getKey());
             number++;
         }
+        methodBuilder.addStatement("return true");
+        methodBuilder.endControlFlow();
         result.addMethod(methodBuilder.build());
     }
 

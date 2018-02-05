@@ -115,16 +115,22 @@ RouterDriver.startActivity(this,"activity://phoneNumber?name=Lee&country=China")
     @Params(group = {"A","B"})
     int count;
     
+    // 参数功能拓展 
+    // 可以使用 name.has() 来判断此参数是否被设置值，
+    // 可用于在 url 来源及 可空参数 场景下无法区分未设参数与传递默认值的问题 
+    @Params
+    Param<String> name; 
+    
 ```
 
 ### 3. 页面返回数据
-使用 `@Result` 注解标记返回数据。  
+使用 `@Results` 注解标记返回数据。  
 使用 `Ferryman.save(this);` 将参数装箱并保存进 Activity。  
 ```java
 @Page
 public class NameInputActivity extends AppCompatActivity {
 
-    @Result String name;
+    @Results String name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,9 +166,17 @@ Ferryman.from(MainActivity.this)
 + 如果是在 Kotlin 中使用，参数还需要加上 `@JvmField` 注解。
 + 可以在参数上随意增加注解，会自动应用到生成的API中，比如`@Nullable`,`@NotNull`,`@IdRes` 或者其他任何支持 `PARAMETER` 的自定义注解。
 
+##### 3.1 返回数据进阶规则
+```java
+    // 返回值功能拓展 
+    // 使用 name.set(T t) 来设置值，可以在页面未设置返回值时，直接回调`emptyResult`而不是`fullResult`加上默认值。
+    @Results
+    Result<String> name; 
+```
+
 ### 4. 页面数据注入抽取
 参数及返回数据可以定义在非 Activity 类里，比如定义在 Presenter 中，只要此类**与 Activity 建立关联**。建立关联有2种方式：  
-1. 通过 `@BindActivity` 注解直接关联。
+##### 4.1 通过 `@BindActivity` 注解直接关联。
 ```java
 @BindActivity(ShopActivity.class)
 public class ShopPresenter {
@@ -170,7 +184,7 @@ public class ShopPresenter {
     public String id;
 }
 ```
-2。 通过`@ActivityRelation` 使用正则匹配对类名进行匹配来批量关联。  
+##### 4.2 通过`@ActivityRelation` 使用正则匹配对类名进行匹配来批量关联。  
 接口与方法名无所谓，只要加上了 `@ActivityRelation` 即可。  
 对所有定义类与Activity的类名进行正则匹配，如果 `activityNameRegular` 匹配出的字符串与 `objectNameRegular` 匹配出的字符串相等，即为关联。
 ```java
@@ -189,6 +203,26 @@ Ferryman.injectFrom(activity).to(this);
 // 装箱保存数据
 Ferryman.saveFrom(this).to(activity);
 ```
+##### 4.3 最佳实践
+直接在BaseActivity进行操作, 省去在每个activity与数据类进行手动注入抽取。
+```java
+public abstract class BaseActivity{
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Ferryman.inject(this);
+        // Ferryman.injectFrom(this).to(presenter);
+    }
+
+    @Override
+    public void finish() {
+        Ferryman.save(this);
+        // Ferryman.saveFrom(getPresenter()).to(this);
+        super.finish();
+    }
+}
+```
+
 ### 5. 自定义路由
 允许自己处理未被绑定 Activity 的 url。返回 null 则表示不能处理这个 url。  
 ```java

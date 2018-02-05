@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.jude.ferryman.R;
 import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.Params;
-import com.jude.ferryman.annotations.Result;
+import com.jude.ferryman.annotations.Results;
 import com.jude.ferryman.Ferryman;
 
 
@@ -22,7 +22,7 @@ public class NameInputActivity extends AppCompatActivity {
 
 
     @Params("name")
-    @Result("name")
+    @Results("name")
     String myName;
 
     EditText etName;

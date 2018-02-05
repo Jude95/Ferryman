@@ -19,11 +19,14 @@ public class Constants {
     public static final String CLASS_ACTIVITY = "android.app.Activity";
     public static final String CLASS_HASHMAP = "java.util.HashMap";
 
-    public static final String CLASS_PORTER = "com.jude.ferryman.internal.inject.Porter";
+    public static final String CLASS_INJECT_PORTER = "com.jude.ferryman.internal.inject.Porter";
     public static final String CLASS_URL = "com.jude.ferryman.internal.router.Url";
-    public static final String CLASS_RESULT = "com.jude.ferryman.internal.inject.Result";
+    public static final String CLASS_INJECT_RESULT = "com.jude.ferryman.internal.inject.PageResult";
     public static final String CLASS_ROUTER = "com.jude.ferryman.internal.router.Table";
     public static final String CLASS_WARDEN = "com.jude.ferryman.Warden";
     public static final String CLASS_ROUTERDRIVER = "com.jude.ferryman.RouterDriver";
+
+    public static final String CLASS_PARAM = "com.jude.ferryman.Param";
+    public static final String CLASS_RESULT = "com.jude.ferryman.Result";
 
 }

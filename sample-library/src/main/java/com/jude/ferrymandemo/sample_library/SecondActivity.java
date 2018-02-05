@@ -9,7 +9,7 @@ import android.view.View;
 import com.jude.ferryman.Ferryman;
 import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.Params;
-import com.jude.ferryman.annotations.Result;
+import com.jude.ferryman.annotations.Results;
 import com.jude.ferryman.record.PageManager;
 
 /**
@@ -22,7 +22,7 @@ public class SecondActivity extends AppCompatActivity {
     String from;
     @Params     // 页面参数
     String to;
-    @Result     // 页面返回值
+    @Results     // 页面返回值
     int score;
 
     @Override

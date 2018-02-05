@@ -12,16 +12,18 @@ import java.util.List;
 public class FieldInfo {
     private String name;
     private String key;
+    private boolean wrapper;
     private String[] group;
     private boolean ignore;
     private TypeName clazz;
     private List<AnnotationSpec> annotations;
 
-    public FieldInfo(String name,String key, TypeName clazz, List<AnnotationSpec> annotations) {
+    public FieldInfo(String name,String key, TypeName clazz, boolean wrapper, List<AnnotationSpec> annotations) {
         this.name = name;
         this.clazz = clazz;
         this.key = key;
         this.annotations = annotations;
+        this.wrapper = wrapper;
         if (key == null || key.length()==0){
             this.key = name;
         }
@@ -43,6 +45,9 @@ public class FieldInfo {
         return clazz;
     }
 
+    public Boolean hasWrapper(){
+        return wrapper;
+    }
 
     public void setClazz(TypeName clazz) {
         this.clazz = clazz;

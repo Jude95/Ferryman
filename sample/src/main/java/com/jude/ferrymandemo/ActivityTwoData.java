@@ -3,9 +3,11 @@ package com.jude.ferrymandemo;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 
+import com.jude.ferryman.Param;
+import com.jude.ferryman.Result;
 import com.jude.ferryman.annotations.BindActivity;
 import com.jude.ferryman.annotations.Params;
-import com.jude.ferryman.annotations.Result;
+import com.jude.ferryman.annotations.Results;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,21 +24,23 @@ public class ActivityTwoData {
 
 
     @Params
-    public String HUIHJioluHNLI;
+    public Param<String> HUIHJioluHNLI;
 
     @Params(ignore = true)
-    @IdRes
-    public int oooo;
+    public Param<Integer> oooo;
 
     @Params(ignore = true)
     @IdRes
     public int xxxx;
 
-    @Result
+    @Results
     public float yee;
 
-    @Result
+    @Results
     @Nullable
     public List<HashMap<String,List<Integer>>> wtfresult;
+
+    @Results
+    public Result<HashMap<String,Integer>> dash;
 
 }

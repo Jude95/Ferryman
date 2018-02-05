@@ -23,7 +23,7 @@ import javax.lang.model.element.Modifier;
 
 import static com.jude.ferryman.compiler.Constants.CLASS_BOAT;
 import static com.jude.ferryman.compiler.Constants.CLASS_CONTEXT;
-import static com.jude.ferryman.compiler.Constants.CLASS_PORTER;
+import static com.jude.ferryman.compiler.Constants.CLASS_INJECT_PORTER;
 import static com.jude.ferryman.compiler.Constants.CLASS_RESULT_SUFFIX;
 import static com.jude.ferryman.compiler.Constants.CLASS_URL;
 import static com.jude.ferryman.compiler.Constants.CLASS_WARDEN;
@@ -270,7 +270,7 @@ public class BoatGenerator extends ClassGenerator {
             generateType(methodBuilder, typeName, number, 0, 0);
             methodBuilder.addStatement("builder.addParam($S, $T.fromObject(type$L$L$L,$L))",
                     fieldInfo.getKey(),
-                    ClassName.bestGuess(CLASS_PORTER),
+                    ClassName.bestGuess(CLASS_INJECT_PORTER),
                     number, 0, 0,
                     fieldInfo.getKey());
             number++;

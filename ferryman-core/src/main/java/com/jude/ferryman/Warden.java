@@ -1,13 +1,13 @@
 package com.jude.ferryman;
 
-import com.jude.ferryman.internal.inject.Result;
+import com.jude.ferryman.internal.inject.PageResult;
 import com.jude.ferryman.internal.router.result.OnActivityResultListener;
 
 /**
  * Created by Jude on 2017/5/22.
  */
 
-public class Warden<T extends Result> {
+public class Warden<T extends PageResult> {
     OnActivityResultListener innerListener = new OnActivityResultListener() {
         @Override
         public void onActivityResult(String result) {
@@ -15,10 +15,9 @@ public class Warden<T extends Result> {
                 listener.onResult();
             }
             if (dataListener!=null){
-                if (result == null){
+                if (result == null || !resultData.read(result)){
                     dataListener.emptyResult();
                 }else {
-                    resultData.read(result);
                     dataListener.fullResult(resultData);
                 }
             }

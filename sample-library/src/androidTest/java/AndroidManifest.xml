@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jude.ferrymandemo.sample_library" >
+
+    <application>
+
+        <activity android:name=".TestActivity"/>
+    </application>
+</manifest>

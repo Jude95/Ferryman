@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.jude.ferryman.R;
 import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.Params;
-import com.jude.ferryman.annotations.Result;
+import com.jude.ferryman.annotations.Results;
 import com.jude.ferryman.Ferryman;
 
 /**
@@ -23,7 +23,7 @@ public class NumberInputActivity extends AppCompatActivity {
     @Params
     String name;
     @Params
-    @Result
+    @Results
     String number;
 
     TextView tvHint;

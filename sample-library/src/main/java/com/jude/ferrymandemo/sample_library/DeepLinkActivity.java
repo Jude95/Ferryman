@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.jude.ferryman.Ferryman;
+import com.jude.ferryman.Param;
 import com.jude.ferryman.annotations.Page;
 import com.jude.ferryman.annotations.Params;
 
@@ -19,10 +20,10 @@ public class DeepLinkActivity extends AppCompatActivity{
     String name;
 
     @Params
-    int time;
+    Param<Integer> time;
 
     @Params(ignore = true)
-    Animal animal;
+    Param<Animal> animal;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
