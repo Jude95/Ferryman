@@ -3,9 +3,7 @@ package com.jude.ferryman.compiler.generator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 
-/**
- * @author Saeed Masoumi (saeed@6thsolution.com)
- */
+
 public abstract class ClassGenerator {
     private String packageName;
     private String name;

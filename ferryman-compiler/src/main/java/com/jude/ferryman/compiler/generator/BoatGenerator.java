@@ -3,6 +3,7 @@ package com.jude.ferryman.compiler.generator;
 import com.jude.ferryman.compiler.Constants;
 import com.jude.ferryman.compiler.model.ActivityInfo;
 import com.jude.ferryman.compiler.model.FieldInfo;
+import com.jude.ferryman.compiler.model.InjectClassInfo;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -97,6 +98,7 @@ public class BoatGenerator extends ClassGenerator {
                 returnType = ParameterizedTypeName.get(ClassName.bestGuess(CLASS_WARDEN), resultType);
             }
 
+
             // 区分模板方法
             Map<String, List<FieldInfo>> groups = divideGroup(activityInfo.getParams());
             for (Map.Entry<String, List<FieldInfo>> fieldListEntry : groups.entrySet()) {
@@ -118,8 +120,15 @@ public class BoatGenerator extends ClassGenerator {
                     // 最终区分了模板与可空之后的方法
                     MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(METHOD_API_PREFIX + activitySimpleName + finalSuffix)
                             .addModifiers(Modifier.PUBLIC)
-                            .addJavadoc("springboard of {@link $T}\n", activityInfo.getName())
+                            .addJavadoc("springboard of \n")
                             .returns(returnType);
+
+                    methodBuilder.addJavadoc("{@link $T}\n",activityInfo.getName());
+                    for (InjectClassInfo injectClassInfo : activityInfo.getInjectClassInfos()) {
+                        if (!injectClassInfo.getName().equals(activityInfo.getName())){
+                            methodBuilder.addJavadoc("{@link $T}\n",injectClassInfo.getName());
+                        }
+                    }
 
                     methodBuilder
                             .addStatement("$T.Builder builder = new $T.Builder()", ClassName.bestGuess(CLASS_URL), ClassName.bestGuess(CLASS_URL))

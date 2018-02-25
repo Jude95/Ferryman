@@ -39,8 +39,8 @@ startActivity(intent);
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.3.0'
-    annotationProcessor 'com.jude:ferryman-compiler:1.3.0'
+    compile 'com.jude:ferryman-core:1.4.0'
+    annotationProcessor 'com.jude:ferryman-compiler:1.4.0'
 
 ## Usage
 
@@ -260,7 +260,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.3.0'
+        classpath 'com.jude:ferryman-modular:1.4.0'
     }
 }
 
