@@ -1,5 +1,6 @@
 package com.jude.ferryman.compiler.generator;
 
+import com.jude.ferryman.compiler.Constants;
 import com.jude.ferryman.compiler.model.FieldInfo;
 import com.jude.ferryman.compiler.model.InjectClassInfo;
 import com.squareup.javapoet.ClassName;
@@ -16,7 +17,7 @@ import javax.lang.model.element.Modifier;
 
 import static com.jude.ferryman.compiler.Constants.CLASS_ACTIVITY;
 import static com.jude.ferryman.compiler.Constants.CLASS_HASHMAP;
-import static com.jude.ferryman.compiler.Constants.CLASS_PORTER;
+import static com.jude.ferryman.compiler.Constants.CLASS_INJECT_PORTER;
 import static com.jude.ferryman.compiler.Constants.CLASS_PORTER_SUFFIX;
 
 /**
@@ -46,7 +47,7 @@ public class PorterGenerator extends ClassGenerator {
         TypeSpec.Builder result =
                 TypeSpec.classBuilder(getClassName())
                         .addModifiers(Modifier.PUBLIC)
-                        .superclass(ClassName.bestGuess(CLASS_PORTER));
+                        .superclass(ClassName.bestGuess(CLASS_INJECT_PORTER));
         addInjectMethod(result);
         addSiphonMethod(result);
         return JavaFile.builder(getPackageName(), result.build())
@@ -55,7 +56,7 @@ public class PorterGenerator extends ClassGenerator {
     }
 
     /**
-     * 添加 Params & Result 参数名定义
+     * 添加 Params & Results 参数名定义
      *
      *      public static final String NAME = "name";
      *
@@ -96,15 +97,31 @@ public class PorterGenerator extends ClassGenerator {
                 .addModifiers(Modifier.PUBLIC,Modifier.STATIC)
                 .returns(TypeName.VOID)
                 .addParameter(info.getName(), PARAMS_OBJECT)
-                .addParameter(ClassName.bestGuess(CLASS_ACTIVITY), PARAMS_ACTIVITY)
-                .addStatement("$T<String,String> params = readParams(activity)",Map.class);
+                .addParameter(ClassName.bestGuess(CLASS_ACTIVITY), PARAMS_ACTIVITY);
+
+        // instance the Param & Result
+        for (FieldInfo fieldInfo : info.getParams()) {
+            if (fieldInfo.hasWrapper()){
+                methodBuilder.addStatement("object.$L = new $T<$T>()",fieldInfo.getName(),ClassName.bestGuess(Constants.CLASS_PARAM),fieldInfo.getClazz());
+            }
+        }
+        for (FieldInfo fieldInfo : info.getResult()) {
+            if (fieldInfo.hasWrapper()){
+                methodBuilder.addStatement("object.$L = new $T<$T>()",fieldInfo.getName(),ClassName.bestGuess(Constants.CLASS_RESULT),fieldInfo.getClazz());
+            }
+        }
+
+        methodBuilder.addStatement("$T<String,String> params = readParams(activity)",Map.class);
         int number = 0;
         for (FieldInfo fieldInfo : info.getParams()) {
             generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
-            methodBuilder
-                    .beginControlFlow("if (params.containsKey($S))",fieldInfo.getKey())
-                    .addStatement("object.$L = toObject(type$L$L$L,params.get($S))",fieldInfo.getName(),number,0,0,fieldInfo.getKey())
-                    .endControlFlow();
+            methodBuilder.beginControlFlow("if (params.containsKey($S))",fieldInfo.getKey());
+            if (fieldInfo.hasWrapper()){
+                methodBuilder.addStatement("object.$L.set(($T)toObject(type$L$L$L,params.get($S)))",fieldInfo.getName(),fieldInfo.getClazz(),number,0,0,fieldInfo.getKey());
+            }else {
+                methodBuilder.addStatement("object.$L = toObject(type$L$L$L,params.get($S))",fieldInfo.getName(),number,0,0,fieldInfo.getKey());
+            }
+            methodBuilder.endControlFlow();
             number++;
         }
         builder.addMethod(methodBuilder.build());
@@ -131,8 +148,15 @@ public class PorterGenerator extends ClassGenerator {
                 .addStatement("$T<String,String> results = new $T<>();",ClassName.bestGuess(CLASS_HASHMAP),ClassName.bestGuess(CLASS_HASHMAP));
         int number = 0;
         for (FieldInfo fieldInfo : info.getResult()) {
-            generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
-            methodBuilder.addStatement("results.put($S, fromObject(type$L$L$L,object.$L))",fieldInfo.getKey(),number,0,0,fieldInfo.getName());
+            if (fieldInfo.hasWrapper()){
+                methodBuilder.beginControlFlow("if (object.$L.changed())",fieldInfo.getName());
+                generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
+                methodBuilder.addStatement("results.put($S, fromObject(type$L$L$L,object.$L.get()))",fieldInfo.getKey(),number,0,0,fieldInfo.getName());
+                methodBuilder.endControlFlow();
+            }else {
+                generateType(methodBuilder,fieldInfo.getClazz(),number,0,0);
+                methodBuilder.addStatement("results.put($S, fromObject(type$L$L$L,object.$L))",fieldInfo.getKey(),number,0,0,fieldInfo.getName());
+            }
             number++;
         }
         methodBuilder.addStatement("writeResult(results,activity)");

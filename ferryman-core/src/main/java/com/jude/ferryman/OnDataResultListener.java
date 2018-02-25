@@ -2,13 +2,13 @@ package com.jude.ferryman;
 
 import android.support.annotation.NonNull;
 
-import com.jude.ferryman.internal.inject.Result;
+import com.jude.ferryman.internal.inject.PageResult;
 
 /**
  * Created by Jude on 2017/5/22.
  */
 
-public interface OnDataResultListener<T extends Result> {
+public interface OnDataResultListener<T extends PageResult> {
     /**
      * 正常的返回
      */
