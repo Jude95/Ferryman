@@ -8,7 +8,7 @@ buildscript {
         bintrayKey = properties.getProperty('bintrayKey')
 
         ferryman_group = 'com.jude'
-        ferryman_version = '1.4.0'
+        ferryman_version = '1.4.1-alpha2'
         ferryman_version_compile = '1.3.1-alpha1'
     }
     repositories {
@@ -33,6 +33,10 @@ allprojects {
         google()
         jcenter()
     }
+}
+
+task uploadAll { task ->
+    task.group = 'upload'
 }
 
 subprojects {pro ->
@@ -66,25 +70,27 @@ subprojects {pro ->
             allLicenses = 'Apache-2.0'
         }
         project.apply from:'https://raw.githubusercontent.com/Jude95/JCenter/v2/bintray.gradle'
+
+        uploadAll.dependsOn project.tasks.bintrayUpload
     }
 }
 
-task uploadAll { task ->
-
-    task.group = 'upload'
-    gradle.projectsEvaluated {
-        task.dependsOn project.tasks.clean
-        task.dependsOn project.tasks.build
-
-        project.tasks.build.mustRunAfter project.tasks.clean
-
-        project.subprojects {
-            if (it.name.startsWith("ferryman-") && !it.tasks.isEmpty()) {
-//                println it.name+" "+it.tasks
-                Task upload = it.tasks.bintrayUpload
-                task.dependsOn upload
-                upload.mustRunAfter project.tasks.build
-            }
-        }
-    }
-}
+//task uploadAll { task ->
+//
+//    task.group = 'upload'
+//    gradle.projectsEvaluated {
+//        task.dependsOn project.tasks.clean
+//        task.dependsOn project.tasks.build
+//
+//        project.tasks.build.mustRunAfter project.tasks.clean
+//
+//        project.subprojects {
+//            if (it.name.startsWith("ferryman-") && !it.tasks.isEmpty()) {
+////                println it.name+" "+it.tasks
+//                Task upload = it.tasks.bintrayUpload
+//                task.dependsOn upload
+//                upload.mustRunAfter project.tasks.build
+//            }
+//        }
+//    }
+//}

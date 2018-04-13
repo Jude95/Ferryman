@@ -8,8 +8,8 @@ import android.os.Bundle;
  * Created by Jude on 2017/8/17.
  */
 
-public class ApplicationStateListener implements Application.ActivityLifecycleCallbacks   {
-
+class ApplicationStateCallback implements Application.ActivityLifecycleCallbacks   {
+    public int mCount = 0;
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -18,6 +18,9 @@ public class ApplicationStateListener implements Application.ActivityLifecycleCa
 
     @Override
     public void onActivityStarted(Activity activity) {
+        if (mCount++ == 0) {
+            PageManager.onEnterForeground();
+        }
     }
 
     @Override
@@ -32,6 +35,9 @@ public class ApplicationStateListener implements Application.ActivityLifecycleCa
 
     @Override
     public void onActivityStopped(Activity activity) {
+        if (--mCount == 0) {
+            PageManager.onEnterBackground();
+        }
     }
 
     @Override

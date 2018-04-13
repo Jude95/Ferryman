@@ -270,9 +270,17 @@ apply plugin: 'com.jude.ferryman-modular'
 
 ### 页面管理
 提供页面管理功能，单独一套 API .
+```groovy
+    compile 'com.jude:ferryman-record:1.4.0'
+```
+
 ```java
 // 初始化，在 Application 中设置
 PageManager.init(Context ctx);
+
+// 添加/删除 Application 前后台切换监听器
+PageManager.addApplicationStateListener(ApplicationStateListener listener);
+PageManager.removeApplicationStateListener(ApplicationStateListener listener);
 
 // 取栈顶 Activity 
 PageManager.getTopActivity();

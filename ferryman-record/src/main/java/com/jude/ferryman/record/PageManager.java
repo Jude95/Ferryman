@@ -6,8 +6,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -17,6 +19,7 @@ import java.util.Stack;
 
 public class PageManager {
     private static Stack<ActivityRecorder> mActivityStack = new Stack<>();
+    private static List<ApplicationStateListener> mApplicationStateListeners = new ArrayList<>();
     private static volatile boolean INIT = false;
 
     /**
@@ -27,7 +30,7 @@ public class PageManager {
         if (!INIT){
             INIT = true;
             Application application = (Application) context.getApplicationContext();
-            application.registerActivityLifecycleCallbacks(new ApplicationStateListener());
+            application.registerActivityLifecycleCallbacks(new ApplicationStateCallback());
         }
     }
 
@@ -44,6 +47,27 @@ public class PageManager {
             }
         }
     }
+
+    static void onEnterBackground(){
+        for (ApplicationStateListener mApplicationStateListener : mApplicationStateListeners) {
+            mApplicationStateListener.onEnterBackground();
+        }
+    }
+
+    static void onEnterForeground(){
+        for (ApplicationStateListener mApplicationStateListener : mApplicationStateListeners) {
+            mApplicationStateListener.onEnterForeground();
+        }
+    }
+
+    public static void addApplicationStateListener(ApplicationStateListener listener){
+        mApplicationStateListeners.add(listener);
+    }
+
+    public static void removeApplicationStateListener(ApplicationStateListener listener){
+        mApplicationStateListeners.remove(listener);
+    }
+
 
     /**
      * 获取顶部Activity
