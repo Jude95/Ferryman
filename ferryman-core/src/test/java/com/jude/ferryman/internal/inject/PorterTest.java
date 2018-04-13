@@ -8,11 +8,4 @@ import org.junit.Test;
  */
 public class PorterTest {
 
-    @Test
-    public void toObject() throws Exception {
-        String integer = "12368";
-        Object i = Porter.toObject(Integer.class,integer);
-        System.out.println(i.getClass());
-        Assert.assertEquals(12368,i);
-    }
 }

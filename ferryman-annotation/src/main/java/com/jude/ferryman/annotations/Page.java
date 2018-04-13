@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface Page {
     /**
      * 某个类的路由信息
-     * @return
+     * @return 地址数组
      */
     String[] value() default {};
 }

@@ -157,6 +157,20 @@ public class PageManager {
         }
     }
 
+
+    /**
+     * 重建所有Activity
+     */
+    public static void recreateAllStack(){
+        while (!mActivityStack.empty()){
+            Activity activity = mActivityStack.pop().getInstance();
+            if (activity!=null){
+                activity.recreate();
+            }
+        }
+    }
+
+
     /**
      * 打印当前Activity堆栈，暂未对不同栈的Activity分开计算
      * @return
