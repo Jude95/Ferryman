@@ -39,8 +39,8 @@ startActivity(intent);
 ```
 ## Dependency
 
-    compile 'com.jude:ferryman-core:1.4.0'
-    annotationProcessor 'com.jude:ferryman-compiler:1.4.0'
+    compile 'com.jude:ferryman-core:1.4.1'
+    annotationProcessor 'com.jude:ferryman-compiler:1.4.1'
 
 ## Usage
 
@@ -260,7 +260,7 @@ Ferryman 可以被使用在 Library 中，Library 中如上正常使用(需要�
 ```grovvy
 buildscript {
     dependencies {
-        classpath 'com.jude:ferryman-modular:1.4.0'
+        classpath 'com.jude:ferryman-modular:1.4.1'
     }
 }
 
@@ -271,7 +271,7 @@ apply plugin: 'com.jude.ferryman-modular'
 ### 页面管理
 提供页面管理功能，单独一套 API .
 ```groovy
-    compile 'com.jude:ferryman-record:1.4.0'
+    compile 'com.jude:ferryman-record:1.4.1'
 ```
 
 ```java
