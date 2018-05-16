@@ -34,5 +34,6 @@ dependencies {
 //    annotationProcessor "com.jude:ferryman-compiler:$ferryman_version_compile"
     annotationProcessor project(":ferryman-compiler")
     compile project(":ferryman-core")
+    compile project(":ferryman-record")
 
 }
