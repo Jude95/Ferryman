@@ -17,9 +17,16 @@ public class ActivityResultHooker {
      * 适用于startActivityForResult()的两个重写的方法的hook启动
      * @param activity
      */
-    public static void startHookFragment(Activity activity, Intent rawIntent, OnActivityResultListener listener){
-        HookFragment fragment = getValidFragment((FragmentActivity) activity);
-        fragment.startActivityForResult(rawIntent, listener);
+    public static boolean startHookFragment(Activity activity, Intent rawIntent, OnActivityResultListener listener){
+        try {
+            HookFragment fragment = getValidFragment((FragmentActivity) activity);
+            fragment.startActivityForResult(rawIntent, listener);
+            return true;
+        }catch (Exception e){
+            // 没办法，总有些异常情况要出现，防不住
+            return false;
+        }
+
     }
 
     /**
