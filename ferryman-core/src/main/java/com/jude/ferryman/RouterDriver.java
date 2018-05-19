@@ -55,7 +55,6 @@ public class RouterDriver {
         }
         if (!(context instanceof FragmentActivity)
                 || listener == null
-                || ((FragmentActivity) context).getSupportFragmentManager().isDestroyed()
                 || !ActivityResultHooker.startHookFragment((Activity) context, intent, listener)) {
 
             // 如果启动失败，就用Activity来启动，这个不会失败
