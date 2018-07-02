@@ -177,7 +177,7 @@ public class FerrymanProcessor extends AbstractProcessor {
     public void writeResultFile() {
         try {
             for (ActivityInfo activityInfo : mActivityInfos) {
-                if (!activityInfo.getResult().isEmpty()) {
+                if (!activityInfo.isNoResult() && !activityInfo.getResult().isEmpty()) {
                     new ResultGenerator(activityInfo).build().writeTo(filer);
 
                 }
@@ -234,7 +234,7 @@ public class FerrymanProcessor extends AbstractProcessor {
             pageUrls = new String[1];
             pageUrls[0] = enclosingElement.getQualifiedName().toString();
         }
-        ActivityInfo info = new ActivityInfo(ClassName.bestGuess(enclosingElement.getQualifiedName().toString()), pageUrls);
+        ActivityInfo info = new ActivityInfo(ClassName.bestGuess(enclosingElement.getQualifiedName().toString()), pageUrls, page.noResult());
         mActivityInfos.add(info);
     }
 
@@ -253,11 +253,11 @@ public class FerrymanProcessor extends AbstractProcessor {
         // judge the Param<T>
         TypeName typeName = convertClass(element.asType());
         boolean hasWrapper = false;
-        if (typeName.toString().contains(Constants.CLASS_PARAM)){
-            if (typeName instanceof ParameterizedTypeName){
+        if (typeName.toString().contains(Constants.CLASS_PARAM)) {
+            if (typeName instanceof ParameterizedTypeName) {
                 typeName = ((ParameterizedTypeName) typeName).typeArguments.get(0);
                 hasWrapper = true;
-            }else {
+            } else {
                 error("Params<> must set the parameter");
             }
         }
@@ -286,11 +286,11 @@ public class FerrymanProcessor extends AbstractProcessor {
         // judge the Results<T>
         TypeName typeName = convertClass(element.asType());
         boolean hasWrapper = false;
-        if (typeName.toString().contains(Constants.CLASS_RESULT)){
-            if (typeName instanceof ParameterizedTypeName){
+        if (typeName.toString().contains(Constants.CLASS_RESULT)) {
+            if (typeName instanceof ParameterizedTypeName) {
                 typeName = ((ParameterizedTypeName) typeName).typeArguments.get(0);
                 hasWrapper = true;
-            }else {
+            } else {
                 error("Results<> must set the parameter");
             }
         }

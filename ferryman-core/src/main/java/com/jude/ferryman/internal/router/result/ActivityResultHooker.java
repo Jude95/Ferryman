@@ -22,7 +22,7 @@ public class ActivityResultHooker {
             HookFragment fragment = getValidFragment((FragmentActivity) activity);
             fragment.startActivityForResult(rawIntent, listener);
             return true;
-        }catch (Exception e){
+        }catch (IllegalStateException e){
             // 没办法，总有些异常情况要出现，防不住
             return false;
         }

@@ -17,4 +17,7 @@ public @interface Page {
      * @return 地址数组
      */
     String[] value() default {};
+
+    boolean noResult() default false;
+
 }

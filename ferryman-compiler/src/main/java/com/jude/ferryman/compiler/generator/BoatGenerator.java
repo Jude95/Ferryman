@@ -91,7 +91,9 @@ public class BoatGenerator extends ClassGenerator {
             TypeName returnType = null;
             TypeName resultType = null;
 
-            if (activityInfo.getResult().isEmpty()) {
+            if (activityInfo.isNoResult()){
+                returnType = TypeName.VOID;
+            }else if (activityInfo.getResult().isEmpty()) {
                 returnType = ClassName.bestGuess(CLASS_WARDEN);
             } else {
                 resultType = ClassName.get(activityInfo.getName().packageName(), activitySimpleName + CLASS_RESULT_SUFFIX);
@@ -135,7 +137,7 @@ public class BoatGenerator extends ClassGenerator {
                             .addStatement("builder.setAddress($S)", activityInfo.getUrl()[0]);
                     addField(methodBuilder, paramsListEntry.getKey());
                     addConverterCode(methodBuilder, paramsListEntry.getKey());
-                    addReturnCode(methodBuilder, resultType, !activityInfo.getResult().isEmpty());
+                    addReturnCode(methodBuilder, resultType, returnType);
 
                     result.addMethod(methodBuilder.build());
                 }
@@ -291,25 +293,31 @@ public class BoatGenerator extends ClassGenerator {
      *
      * @param methodBuilder
      * @param resultType
-     * @param hasReturn
      */
-    private void addReturnCode(MethodSpec.Builder methodBuilder, TypeName resultType, boolean hasReturn) {
-        if (!hasReturn) {
-            methodBuilder.addStatement("$T warden = new $T()",
-                    ClassName.bestGuess(Constants.CLASS_WARDEN),
-                    ClassName.bestGuess(Constants.CLASS_WARDEN));
-        } else {
-            methodBuilder.addStatement("$T<$T> warden = new $T<>(new $T())",
-                    ClassName.bestGuess(Constants.CLASS_WARDEN),
-                    resultType,
-                    ClassName.bestGuess(Constants.CLASS_WARDEN),
-                    resultType);
+    private void addReturnCode(MethodSpec.Builder methodBuilder, TypeName resultType,TypeName returnType) {
+        if (returnType == TypeName.VOID){
+            methodBuilder.addStatement("$T.startActivityFromAPI($L,builder.build().toString(),null)",
+                    ClassName.bestGuess(Constants.CLASS_ROUTERDRIVER),
+                    PARAMETER_CONTEXT
+            );
+        }else {
+            if (resultType == null) {
+                methodBuilder.addStatement("$T warden = new $T()",
+                        ClassName.bestGuess(Constants.CLASS_WARDEN),
+                        ClassName.bestGuess(Constants.CLASS_WARDEN));
+            } else {
+                methodBuilder.addStatement("$T<$T> warden = new $T<>(new $T())",
+                        ClassName.bestGuess(Constants.CLASS_WARDEN),
+                        resultType,
+                        ClassName.bestGuess(Constants.CLASS_WARDEN),
+                        resultType);
+            }
+            methodBuilder.addStatement("$T.startActivityFromAPI($L,builder.build().toString(),warden.innerListener)",
+                    ClassName.bestGuess(Constants.CLASS_ROUTERDRIVER),
+                    PARAMETER_CONTEXT
+            );
+            methodBuilder.addStatement("return warden");
         }
-        methodBuilder.addStatement("$T.startActivityFromAPI($L,builder.build().toString(),warden.innerListener)",
-                ClassName.bestGuess(Constants.CLASS_ROUTERDRIVER),
-                PARAMETER_CONTEXT
-        );
-        methodBuilder.addStatement("return warden");
     }
 
 

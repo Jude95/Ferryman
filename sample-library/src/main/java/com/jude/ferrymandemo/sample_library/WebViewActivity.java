@@ -12,7 +12,7 @@ import com.jude.ferryman.annotations.Params;
 /**
  * Created by Jude on 2017/12/4.
  */
-@Page("library://webview")
+@Page(value = "library://webview",noResult = true)
 public class WebViewActivity extends AppCompatActivity {
 
     @Params

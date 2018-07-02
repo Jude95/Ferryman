@@ -11,13 +11,15 @@ import java.util.ArrayList;
 public class ActivityInfo {
     ClassName name;
     String[] url;
+    boolean noResult;
     ArrayList<FieldInfo> params = new ArrayList<>();
     ArrayList<FieldInfo> result = new ArrayList<>();
     ArrayList<InjectClassInfo> injectClassInfos = new ArrayList<>();
 
-    public ActivityInfo(ClassName name,String[] url) {
+    public ActivityInfo(ClassName name,String[] url,boolean noResult) {
         this.name = name;
         this.url = url;
+        this.noResult = noResult;
     }
 
     public void addParams(FieldInfo info){
@@ -35,6 +37,10 @@ public class ActivityInfo {
 
     public void addInjectClassInfos(InjectClassInfo injectClassInfo){
         injectClassInfos.add(injectClassInfo);
+    }
+
+    public boolean isNoResult() {
+        return noResult;
     }
 
     public ClassName getName() {

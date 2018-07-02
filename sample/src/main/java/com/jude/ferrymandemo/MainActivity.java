@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_library).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 RouterDriver.startActivity(MainActivity.this,"library://test_library");
             }
         });
@@ -75,21 +77,28 @@ public class MainActivity extends AppCompatActivity {
         btnInputName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Ferryman.from(MainActivity.this)
-                        .gotoNameInputActivity(tvName.getText().toString())
-                        .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
-                            @Override
-                            public void fullResult(@NonNull NameInputActivityResult data) {
-                                name = data.getName();
-                                tvName.setText(data.getName());
-                            }
+                finish();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Ferryman.from(MainActivity.this)
+                                .gotoNameInputActivity(tvName.getText().toString())
+                                .onResultWithData(new OnDataResultListener<NameInputActivityResult>() {
+                                    @Override
+                                    public void fullResult(@NonNull NameInputActivityResult data) {
+                                        name = data.getName();
+                                        tvName.setText(data.getName());
+                                    }
 
-                            @Override
-                            public void emptyResult() {
+                                    @Override
+                                    public void emptyResult() {
 
-                            }
+                                    }
 
-                        });
+                                });
+                    }
+                },1000);
+
             }
         });
         btnInputNumber.setOnClickListener(new View.OnClickListener() {
